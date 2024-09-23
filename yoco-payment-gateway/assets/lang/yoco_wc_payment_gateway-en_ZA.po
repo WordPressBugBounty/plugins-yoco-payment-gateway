@@ -1,0 +1,315 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: yoco_wc_payment_gateway\n"
+"POT-Creation-Date: 2023-06-12 13:09+0200\n"
+"PO-Revision-Date: 2023-06-12 13:14+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_ZA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e;_x\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: src/Core/Actions.php:21
+msgid "Settings"
+msgstr ""
+
+#: src/Core/Language.php:24 src/Core/Language.php:25
+msgid "Failed to load plugin textdomain."
+msgstr ""
+
+#: src/Core/Setup.php:22
+msgid "Required SSL usage."
+msgstr ""
+
+#: src/Core/Setup.php:29
+msgid "Required PHP version 7.4.0 or higher."
+msgstr ""
+
+#: src/Core/Setup.php:34
+msgid "Required WordPress version 5.0 or higher."
+msgstr ""
+
+#: src/Core/Setup.php:39
+msgid "Required WooCommerce version 4.0 or higher."
+msgstr ""
+
+#: src/Core/Singleton.php:41
+msgid "Cannot unserialize singleton"
+msgstr ""
+
+#: src/Gateway/Admin/Notices.php:24
+msgid "Test mode enabled."
+msgstr ""
+
+#: src/Gateway/Admin/Notices.php:36
+#, php-format
+msgid "Currency is not supported (%s)."
+msgstr ""
+
+#: src/Gateway/Admin/Notices.php:48
+msgid "Payment method not available for unsafe websites (SSL)."
+msgstr ""
+
+#: src/Gateway/Gateway.php:31 src/Gateway/Settings.php:33
+msgid "Yoco – Debit and Credit Card New"
+msgstr ""
+
+#: src/Gateway/Gateway.php:32 src/Gateway/Settings.php:39
+msgid "Pay securely with your debit or credit card via Yoco."
+msgstr ""
+
+#: src/Gateway/Gateway.php:34 src/Helpers/Admin/Notices.php:43
+msgid "Yoco Payment Gateway"
+msgstr ""
+
+#: src/Gateway/Gateway.php:35
+msgid "Yoco Payment Gateway."
+msgstr ""
+
+#: src/Gateway/Gateway.php:78
+#, php-format
+msgid ""
+"Your gateway is not installed. You must apply and save the plugin %s secrets."
+msgstr ""
+
+#: src/Gateway/Notes.php:25
+#, php-format
+msgid "Failed to retrieve order (session) of ID %s."
+msgstr ""
+
+#: src/Gateway/Notes.php:32
+#, php-format
+msgid "Failed to retrieve order session ID of ID %s."
+msgstr ""
+
+#: src/Gateway/Notes.php:36
+#, php-format
+msgid "Yoco: Received checkout session ID (%s)."
+msgstr ""
+
+#: src/Gateway/Notes.php:44
+#, php-format
+msgid "Failed to retrieve order (payment) of ID %s."
+msgstr ""
+
+#: src/Gateway/Notes.php:51
+#, php-format
+msgid "Failed to retrieve order payment ID of ID %s."
+msgstr ""
+
+#: src/Gateway/Notes.php:55
+#, php-format
+msgid "Yoco: Received payment session ID (%s)."
+msgstr ""
+
+#: src/Gateway/Notes.php:63
+#, php-format
+msgid "Failed to retrieve order (refund) of ID %s."
+msgstr ""
+
+#: src/Gateway/Notes.php:70
+#, php-format
+msgid "Failed to retrieve order refund ID of ID %s."
+msgstr ""
+
+#: src/Gateway/Notes.php:74
+#, php-format
+msgid "Yoco: Received refund session ID (%s)."
+msgstr ""
+
+#: src/Gateway/Processors/OptionsProcessor.php:40
+msgid "Missing installation ID."
+msgstr ""
+
+#: src/Gateway/Processors/OptionsProcessor.php:54
+msgid "Plugin installed successfully."
+msgstr ""
+
+#: src/Gateway/Processors/OptionsProcessor.php:59
+msgid "Failed to install plugin."
+msgstr ""
+
+#: src/Gateway/Processors/PaymentProcessor.php:26
+msgid "You must have an order with a minimum of R2,00 to place your order."
+msgstr ""
+
+#: src/Gateway/Processors/PaymentProcessor.php:37
+#, php-format
+msgid "Yoco: ERROR: Failed to request for payment: \"%s\"."
+msgstr ""
+
+#: src/Gateway/Processors/RefundProcessor.php:18
+msgid "Refund failed. Only full refund allowed."
+msgstr ""
+
+#: src/Gateway/Processors/RefundProcessor.php:35
+#, php-format
+msgid "Yoco: ERROR: Failed to request for refund: \"%s\"."
+msgstr ""
+
+#: src/Gateway/Settings.php:23
+msgid "Enable/Disable"
+msgstr ""
+
+#: src/Gateway/Settings.php:24
+msgid "Enable Yoco Gateway"
+msgstr ""
+
+#: src/Gateway/Settings.php:30
+msgid "Title"
+msgstr ""
+
+#: src/Gateway/Settings.php:32
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: src/Gateway/Settings.php:36
+msgid "Description"
+msgstr ""
+
+#: src/Gateway/Settings.php:38
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: src/Gateway/Settings.php:42
+msgid "Customer Error Message"
+msgstr ""
+
+#: src/Gateway/Settings.php:44
+msgid "What the client sees when a payment processing error occurs"
+msgstr ""
+
+#: src/Gateway/Settings.php:45
+msgid "Your order could not be processed by Yoco - please try again later"
+msgstr ""
+
+#: src/Gateway/Settings.php:48 src/Gateway/Settings.php:49
+msgid "Mode"
+msgstr ""
+
+#: src/Gateway/Settings.php:51
+msgid ""
+"Test mode allow you to test the plugin without processing money, make sure "
+"you set the plugin to live mode and click on \"Save changes\" for real "
+"customers to use it"
+msgstr ""
+
+#: src/Gateway/Settings.php:59 src/Gateway/Settings.php:61
+msgid "Live Public Key"
+msgstr ""
+
+#: src/Gateway/Settings.php:64 src/Gateway/Settings.php:66
+msgid "Live Secret Key"
+msgstr ""
+
+#: src/Gateway/Settings.php:69 src/Gateway/Settings.php:71
+msgid "Test Public Key"
+msgstr ""
+
+#: src/Gateway/Settings.php:74 src/Gateway/Settings.php:76
+msgid "Test Secret Key"
+msgstr ""
+
+#: src/Gateway/Settings.php:102
+msgid "Yoco: Checkout session canceled."
+msgstr ""
+
+#: src/Gateway/Settings.php:108
+msgid "Yoco: Checkout session failed."
+msgstr ""
+
+#: src/Helpers/Http/Client.php:12
+msgid "Invalid URL for POST request."
+msgstr ""
+
+#: src/Helpers/Http/Client.php:26
+#, php-format
+msgid "Failed to request plugin installation. %s"
+msgstr ""
+
+#: src/Init.php:114
+#, php-format
+msgid "Class %1$s hasn't been binded!"
+msgstr ""
+
+#: src/Installation/Installation.php:60 src/Installation/Installation.php:72
+msgid "Failed to save installation ID option."
+msgstr ""
+
+#: src/Installations/InstallationsManager.php:39
+msgid "Failed to save Yoco installation ID."
+msgstr ""
+
+#: src/Installations/InstallationsManager.php:41
+msgid "Successfully saved installation identifier."
+msgstr ""
+
+#: src/Installations/InstallationsManager.php:72
+msgid "Failed to save Svix webhook secret."
+msgstr ""
+
+#: src/Installations/InstallationsManager.php:74
+msgid "Successfully saved subscription secret."
+msgstr ""
+
+#: src/Integrations/Svix/SignatureValidator.php:27
+#, php-format
+msgid "Failed to verify Svix webhook signature. %s"
+msgstr ""
+
+#: src/Integrations/Svix/SignatureValidator.php:42
+msgid "Failed to verify signature. Svix webhook secret must be unempty string."
+msgstr ""
+
+#: src/Integrations/Yoco/Requests/Refund.php:15
+msgid "Refund requested via webhook."
+msgstr ""
+
+#: src/Integrations/Yoco/Webhooks/Controllers/WebhookController.php:54
+#, php-format
+msgid "Failed to handle webhook post request. %s"
+msgstr ""
+
+#: src/Integrations/Yoco/Webhooks/Controllers/WebhookController.php:65
+msgid "Method not allowed"
+msgstr ""
+
+#: src/Integrations/Yoco/Webhooks/Events/WebhookEventsManager.php:35
+#, php-format
+msgid "Unknown event type to process: %s."
+msgstr ""
+
+#: src/Integrations/Yoco/Webhooks/Parsers/WebhookPayloadParser.php:40
+#, php-format
+msgid "Webhook request body is invalid. Violated fields: %s."
+msgstr ""
+
+#: src/Repositories/OrdersRepository.php:30
+#, php-format
+msgid "Order of checkout ID (%s) not found in the repository."
+msgstr ""
+
+#: src/Repositories/OrdersRepository.php:48
+#, php-format
+msgid "Order of payment ID (%s) not found in the repository."
+msgstr ""
+
+#: src/Repositories/OrdersRepository.php:66
+#, php-format
+msgid "Order of refund ID (%s) not found in the repository."
+msgstr ""
+
+#: src/Repositories/OrdersRepository.php:80
+msgid "Order not found."
+msgstr ""
+
+#: src/Repositories/OrdersRepository.php:86
+#: src/Repositories/OrdersRepository.php:97
+msgid "Order is not instance of WC_Order."
+msgstr ""

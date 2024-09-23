@@ -1,0 +1,41 @@
+.yoco-woocommerce-settings-error {
+  color: red;
+}
+
+.woocommerce table.form-table fieldset {
+  margin-top: 1rem;
+	max-width: 80ch;
+}
+
+.woocommerce table.form-table fieldset p {
+  margin-top: 0.75rem;
+}
+
+.password-warp {
+  display: inline-block;
+  position: relative;
+}
+
+.yoco-api-key {
+  display: inline-block;
+  position: relative;
+}
+
+.yoco-api-key .button.yoco-hide-key {
+  background: 0 0;
+  border: 1px solid transparent;
+  box-shadow: none;
+  font-size: 14px;
+  line-height: 1;
+  width: 2.5rem;
+  height: 1.875rem;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.yoco-hide-key span {
+  pointer-events: none;
+}
