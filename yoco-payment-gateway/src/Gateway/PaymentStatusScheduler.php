@@ -114,7 +114,7 @@ class PaymentStatusScheduler {
 					)
 				);
 
-				if ( 'completed' === $payment_status && true === $order->update_status( 'processing' ) ) {
+				if ( 'completed' === $payment_status && true === $order->payment_complete( $payment_id ) ) {
 					$order->update_meta_data( 'yoco_order_payment_id', $payment_id );
 					$order->save_meta_data();
 
@@ -221,11 +221,11 @@ class PaymentStatusScheduler {
 			$payment_status = $data['body']['status'];
 			$payment_id     = $data['body']['paymentId'];
 
-			if ( 'completed' === $payment_status && true === $order->update_status( 'processing' ) ) {
+			if ( 'completed' === $payment_status && true === $order->payment_complete( $payment_id ) ) {
 				$order->update_meta_data( 'yoco_order_payment_id', $payment_id );
 				$order->save_meta_data();
 
-				if ( ! empty( $order->get_meta( 'yoco_order_payment_id', true ) ) ) {
+				if ( $payment_id === $order->get_meta( 'yoco_order_payment_id', true ) ) {
 					$this->remove_order( $order->get_id() );
 					do_action( 'yoco_payment_gateway/order/meta/yoco_order_payment_id/updated_successfully', $order->get_id() );
 				}

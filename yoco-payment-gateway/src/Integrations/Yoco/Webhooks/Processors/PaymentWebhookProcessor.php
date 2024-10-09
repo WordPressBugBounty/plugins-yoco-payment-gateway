@@ -35,11 +35,11 @@ class PaymentWebhookProcessor extends WebhookProcessor {
 			return $this->sendFailResponse( 404, sprintf( 'No order found for CheckoutId %s.', $payload->getCheckoutId() ) );
 		}
 
-		if ( ! empty( $this->order->get_meta( 'yoco_order_payment_id', true, 'yoco' ) ) ) {
+		if ( ! empty( $this->order->get_meta( 'yoco_order_payment_id', true ) ) ) {
 			return $this->sendSuccessResponse();
 		}
 
-		if ( true === $this->order->update_status( 'processing' ) ) {
+		if ( true === $this->order->payment_complete( $payload->getPaymentId() ) ) {
 			do_action( 'yoco_payment_gateway/payment/completed', $this->order, $payload );
 
 			return $this->sendSuccessResponse();
