@@ -71,6 +71,19 @@ class Installation {
 		return '';
 	}
 
+	public function getPaymentApiUrl(): string {
+		/**
+		 * @var Constants $constants
+		 */
+		$constants = yoco( Constants::class );
+
+		if ( $constants->getPaymentApiUrl() ) {
+			return $constants->getPaymentApiUrl();
+		}
+
+		return '';
+	}
+
 	public function getApiBearer( string $mode = '' ): string {
 		return 'Bearer ' . $this->getSecretKey( $mode );
 	}

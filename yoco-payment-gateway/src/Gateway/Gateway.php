@@ -83,7 +83,7 @@ class Gateway extends WC_Payment_Gateway {
 		$order     = wc_get_order( $order_id );
 		$processor = new RefundProcessor();
 
-		return $processor->process( $order, $amount, $reason );
+		return $processor->process( $order, $amount );
 	}
 
 	public function update_admin_options() {

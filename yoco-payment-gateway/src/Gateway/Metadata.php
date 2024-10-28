@@ -3,6 +3,8 @@
 namespace Yoco\Gateway;
 
 use WC_Order;
+use WC_Abstract_Order;
+use WC_Order_Refund;
 use Yoco\Integrations\Yoco\Webhooks\Models\WebhookPayload;
 
 class Metadata {
@@ -37,32 +39,60 @@ class Metadata {
 		return $this->getOrderMeta( $order, self::CHECKOUT_URL_ORDER_META_KEY );
 	}
 
-	public function updateOrderPaymentId( WC_Order $order, WebhookPayload $payload ): void {
-		$this->updateOrderMeta( $order, self::PAYMENT_ID_ORDER_META_KEY, $payload->getPaymentId() );
+	public function updateOrderPaymentId( WC_Order $order, $payload ): void {
+		$order_payment_id = $this->getOrderPaymentId( $order );
+		$payment_id       = $payload instanceof WebhookPayload ? $payload->getPaymentId() : $payload;
+		if ( $order_payment_id && $order_payment_id === $payment_id ) {
+			return;
+		}
+
+		$this->updateOrderMeta( $order, self::PAYMENT_ID_ORDER_META_KEY, $payment_id );
 	}
 
 	public function getOrderPaymentId( WC_Order $order ): string {
 		return $this->getOrderMeta( $order, self::PAYMENT_ID_ORDER_META_KEY );
 	}
 
-	public function updateOrderRefundId( WC_Order $order, array $data ): void {
+	public function updateOrderRefundId( WC_Abstract_Order $order, array $data ): void {
+		if ( ! isset( $data['refundId'] ) ) {
+			return;
+		}
+
+		if ( $order instanceof WC_Order_Refund ) {
+			$reason = $order->get_reason();
+			if (
+				false === strpos( $reason, 'Refund ID (' )
+				&& false === strpos( $reason, $data['refundId'] )
+			) {
+				$order->set_reason( $reason . '. Refund ID (' . $data['refundId'] . ')' );
+				$order->save();
+			}
+		}
+
+		$refund_id = $this->getOrderRefundId( $order );
+		if ( $refund_id && $refund_id === $data['refundId'] ) {
+			return;
+		}
+
 		$this->updateOrderMeta( $order, self::REFUND_ID_ORDER_META_KEY, $data['refundId'] );
 	}
 
-	public function getOrderRefundId( WC_Order $order ): string {
+	public function getOrderRefundId( WC_Abstract_Order $order ): string {
 		return $this->getOrderMeta( $order, self::REFUND_ID_ORDER_META_KEY );
 	}
 
-	public function updateOrderMeta( WC_Order $order, string $key, string $value ): void {
+	public function updateOrderMeta( WC_Abstract_Order $order, string $key, string $value ): void {
 		$order->update_meta_data( $key, $value );
 		$order->save_meta_data();
+		$order->save();
+
 		$action = ! empty( $this->getOrderMeta( $order, $key ) ) ? 'updated_successfully' : 'updated_unsuccessfully';
 
 		do_action( "yoco_payment_gateway/order/meta/{$key}/{$action}", $order->get_id() );
 	}
 
-	public function getOrderMeta( WC_Order $order, string $key ): string {
-		$meta = $order->get_meta( $key, true, 'yoco' );
+	public function getOrderMeta( WC_Abstract_Order $order, string $key ): string {
+		$meta = $order->get_meta( $key, true );
 
 		return is_string( $meta ) ? $meta : '';
 	}

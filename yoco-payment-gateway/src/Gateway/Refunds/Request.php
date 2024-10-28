@@ -1,12 +1,11 @@
 <?php
 
-namespace Yoco\Gateway\Refund;
+namespace Yoco\Gateway\Refunds;
 
 use WC_Order;
 use Yoco\Gateway\Metadata;
 use Yoco\Helpers\Http\Client;
 use Yoco\Installation\Installation;
-use Yoco\Helpers\MoneyFormatter as Money;
 
 use function Yoco\yoco;
 
@@ -21,38 +20,34 @@ class Request {
 		$this->installation = yoco( Installation::class );
 	}
 
-	public function send( ?float $amount ): array {
+	public function get(): array {
 		try {
 			$client = new Client();
 
 			$url  = $this->getUrl();
-			$args = $this->getArgs( $amount );
+			$args = $this->getArgs();
 
-			return $client->post( $url, $args );
+			return $client->get( $url, $args );
 		} catch ( \Throwable $th ) {
 			throw $th;
 		}
 	}
 
-	public function getCheckoutId(): string {
-		return yoco( Metadata::class )->getOrderCheckoutId( $this->order );
+	public function getPaymentId(): string {
+		return yoco( Metadata::class )->getOrderPaymentId( $this->order );
 	}
 
 	private function getUrl(): string {
-		$url = $this->installation->getCheckoutApiUrl();
+		$url = $this->installation->getPaymentApiUrl();
 
-		return trailingslashit( $url ) . $this->getCheckoutId() . '/refund';
+		return trailingslashit( $url ) . $this->getPaymentId() . '/refunds';
 	}
 
-	private function getArgs( ?float $amount = null ): array {
+	private function getArgs(): array {
 
 		$args = array(
 			'headers' => $this->getHeaders(),
 		);
-
-		if ( null !== $amount && 0 < $amount ) {
-			$args['body'] = wp_json_encode( array( 'amount' => yoco( Money::class )->format( $amount ) ) );
-		}
 
 		return $args;
 	}
@@ -64,6 +59,6 @@ class Request {
 			'X-Product'     => 'woocommerce',
 		);
 
-		return apply_filters( 'yoco_payment_gateway/refund/request/headers', $headers );
+		return apply_filters( 'yoco_payment_gateway/refunds/request/headers', $headers );
 	}
 }

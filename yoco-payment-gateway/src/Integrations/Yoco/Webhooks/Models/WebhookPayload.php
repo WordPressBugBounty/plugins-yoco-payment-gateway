@@ -8,11 +8,31 @@ class WebhookPayload {
 
 	private ?string $paymentId = null;
 
+	private ?string $id = null;
+
 	private ?string $currency = null;
 
 	private ?string $eventType = null;
 
+	private ?string $status = null;
+
+	private ?int $amount = null;
+
+	private ?int $refundableAmount = null;
+
 	private ?string $failureReason = null;
+
+	public function setId( string $id ): void {
+		$this->id = $id;
+	}
+
+	public function hasId(): bool {
+		return ! empty( $this->getId() );
+	}
+
+	public function getId(): ?string {
+		return $this->id;
+	}
 
 	public function setCheckoutId( string $checkoutId ): void {
 		$this->checkoutId = $checkoutId;
@@ -60,6 +80,42 @@ class WebhookPayload {
 
 	public function getEventType(): ?string {
 		return $this->eventType;
+	}
+
+	public function setStatus( string $status ): void {
+		$this->status = $status;
+	}
+
+	public function hasStatus(): bool {
+		return ! empty( $this->status );
+	}
+
+	public function getStatus(): ?string {
+		return $this->status;
+	}
+
+	public function setAmount( int $amount ): void {
+		$this->amount = $amount;
+	}
+
+	public function hasAmount(): bool {
+		return ! empty( $this->amount );
+	}
+
+	public function getAmount(): ?int {
+		return $this->amount;
+	}
+
+	public function setRefundableAmount( int $amount ): void {
+		$this->refundableAmount = $amount;
+	}
+
+	public function hasRefundableAmount(): bool {
+		return ! empty( $this->refundableAmount );
+	}
+
+	public function getRefundableAmount(): ?int {
+		return $this->refundableAmount;
 	}
 
 	public function setFailureReason( string $failureReason ): void {

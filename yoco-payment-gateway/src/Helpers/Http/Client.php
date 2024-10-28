@@ -18,7 +18,7 @@ class Client {
 
 		if ( is_wp_error( $response ) ) {
 			yoco( Logger::class )->logError(
-				__( 'Invalid response:', 'yoco_wc_payment_gateway' ) . ' ' . $response->get_error_message() . ' code: ' . $response->get_error_code()
+				'Invalid response: ' . $response->get_error_message() . ' code: ' . $response->get_error_code()
 			);
 			throw new Exception( $response->get_error_message(), 0 );
 		}

@@ -24,6 +24,13 @@ class RefundWebhookPayloadParser implements WebhookPayloadParser {
 		$this->payload->setEventType( $data['type'] );
 		$this->payload->setCheckoutId( $data['payload']['metadata']['checkoutId'] );
 		$this->payload->setPaymentId( $data['payload']['paymentId'] );
+		$this->payload->setId( $data['payload']['id'] );
+		$this->payload->setStatus( $data['payload']['status'] );
+		$this->payload->setAmount( $data['payload']['amount'] );
+
+		if ( isset( $data['payload']['refundableAmount'] ) && ! empty( $data['payload']['refundableAmount'] ) ) {
+			$this->payload->setRefundableAmount( $data['payload']['refundableAmount'] );
+		}
 
 		if ( isset( $data['payload']['failureReason'] ) && ! empty( $data['payload']['failureReason'] ) ) {
 			$this->payload->setFailureReason( $data['payload']['failureReason'] );

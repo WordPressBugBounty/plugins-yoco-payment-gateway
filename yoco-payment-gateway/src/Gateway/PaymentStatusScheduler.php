@@ -4,16 +4,13 @@ namespace Yoco\Gateway;
 
 use WC_DateTime;
 use WC_Order;
+use Yoco\Gateway\Metadata;
 use Yoco\Gateway\Payment\Request;
 use Yoco\Helpers\Logger;
 
 use function Yoco\yoco;
 
 class PaymentStatusScheduler {
-
-	private const CHECKOUT_ID_ORDER_META_KEY = 'yoco_order_checkout_id';
-
-	private const PAYMENT_ID_ORDER_META_KEY = 'yoco_order_payment_id';
 
 	private const SCHEDULE_INTERVAL = 60;  // seconds.
 
@@ -42,7 +39,7 @@ class PaymentStatusScheduler {
 	}
 
 	public function process_list() {
-		$orders_to_process      = get_option( 'yoco_orders_pending_payment', array() );
+		$orders_to_process = get_option( 'yoco_orders_pending_payment', array() );
 
 		if ( empty( $orders_to_process ) || ! is_array( $orders_to_process ) ) {
 			return;
@@ -59,7 +56,7 @@ class PaymentStatusScheduler {
 			}
 
 			// If order has payment ID saved in meta this means payment was successful and we remove order from the list.
-			if ( ! empty( $order->get_meta( 'yoco_order_payment_id', true ) ) ) {
+			if ( ! empty( yoco( Metadata::class )->getOrderPaymentId( $order ) ) ) {
 				$this->remove_order( $order_id );
 				continue;
 			}
@@ -115,13 +112,7 @@ class PaymentStatusScheduler {
 				);
 
 				if ( 'completed' === $payment_status && true === $order->payment_complete( $payment_id ) ) {
-					$order->update_meta_data( 'yoco_order_payment_id', $payment_id );
-					$order->save_meta_data();
-
-					if ( ! empty( $order->get_meta( 'yoco_order_payment_id', true ) ) ) {
-						$this->remove_order( $order->get_id() );
-						do_action( 'yoco_payment_gateway/order/meta/yoco_order_payment_id/updated_successfully', $order->get_id() );
-					}
+					yoco( Metadata::class )->updateOrderPaymentId( $order, $payment_id );
 					continue;
 				}
 
@@ -205,7 +196,7 @@ class PaymentStatusScheduler {
 		}
 
 		// If we have payment ID saved in meta this means payment was successful and we can remove order from the list.
-		if ( ! empty( $order->get_meta( 'yoco_order_payment_id', true ) ) ) {
+		if ( ! empty( yoco( Metadata::class )->getOrderPaymentId( $order ) ) ) {
 			$this->remove_order( $order->get_id() );
 			return;
 		}
@@ -222,13 +213,7 @@ class PaymentStatusScheduler {
 			$payment_id     = $data['body']['paymentId'];
 
 			if ( 'completed' === $payment_status && true === $order->payment_complete( $payment_id ) ) {
-				$order->update_meta_data( 'yoco_order_payment_id', $payment_id );
-				$order->save_meta_data();
-
-				if ( $payment_id === $order->get_meta( 'yoco_order_payment_id', true ) ) {
-					$this->remove_order( $order->get_id() );
-					do_action( 'yoco_payment_gateway/order/meta/yoco_order_payment_id/updated_successfully', $order->get_id() );
-				}
+				yoco( Metadata::class )->updateOrderPaymentId( $order, $payment_id );
 			}
 		} catch ( \Throwable $th ) {
 			yoco( Logger::class )->logError( sprintf( 'Failed to handle order payment status update. %s', $th->getMessage() ) );
@@ -297,31 +282,5 @@ class PaymentStatusScheduler {
 		}
 
 		update_option( 'yoco_orders_pending_payment', $orders, false );
-	}
-
-	public function getOrderCheckoutId( WC_Order $order ): string {
-		return $this->getOrderMeta( $order, self::CHECKOUT_ID_ORDER_META_KEY );
-	}
-
-	public function updateOrderPaymentId( WC_Order $order, string $payment_id ): void {
-		$this->updateOrderMeta( $order, self::PAYMENT_ID_ORDER_META_KEY, $payment_id );
-	}
-
-	public function getOrderPaymentId( WC_Order $order ): string {
-		return $this->getOrderMeta( $order, self::PAYMENT_ID_ORDER_META_KEY );
-	}
-
-	public function updateOrderMeta( WC_Order $order, string $key, string $value ): void {
-		$order->update_meta_data( $key, $value );
-		$order->save_meta_data();
-		$action = ! empty( $this->getOrderMeta( $order, $key ) ) ? 'updated_successfully' : 'updated_unsuccessfully';
-
-		do_action( "yoco_payment_gateway/order/meta/{$key}/{$action}", $order->get_id() );
-	}
-
-	public function getOrderMeta( WC_Order $order, string $key ): string {
-		$meta = $order->get_meta( $key, true, 'yoco' );
-
-		return is_string( $meta ) ? $meta : '';
 	}
 }

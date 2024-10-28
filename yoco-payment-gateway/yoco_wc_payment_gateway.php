@@ -5,7 +5,7 @@
  * Description: Take debit and credit card payments on your store.
  * Author: Yoco
  * Author URI: https://www.yoco.com
- * Version: 3.7.1
+ * Version: 3.8.0
  * Requires at least: 5.0.0
  * Tested up to: 6.6
  * WC requires at least: 8.0.0
@@ -26,8 +26,15 @@ define( 'YOCO_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'YOCO_ASSETS_PATH', plugin_dir_path( __FILE__ ) . 'assets' );
 define( 'YOCO_ASSETS_URI', plugins_url( 'assets', __FILE__ ) );
 
-define( 'YOCO_ONLINE_CHECKOUT_URL', 'https://payments.yoco.com/api/checkouts' );
-define( 'YOCO_INSTALL_API_URL', 'https://plugin.yoco.com/installation/woocommerce/createOrUpdate' );
+if ( ! defined( 'YOCO_ONLINE_CHECKOUT_URL' ) ) {
+	define( 'YOCO_ONLINE_CHECKOUT_URL', 'https://payments.yoco.com/api/checkouts' );
+}
+if ( ! defined( 'YOCO_ONLINE_PAYMENT_URL' ) ) {
+	define( 'YOCO_ONLINE_PAYMENT_URL', 'https://payments-online.yoco.com/payments' );
+}
+if ( ! defined( 'YOCO_INSTALL_API_URL' ) ) {
+	define( 'YOCO_INSTALL_API_URL', 'https://plugin.yoco.com/installation/woocommerce/createOrUpdate' );
+}
 
 use function Yoco\yoco_load;
 use function Yoco\yoco;

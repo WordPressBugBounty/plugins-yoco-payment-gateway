@@ -28,6 +28,7 @@ class Checkout {
 			->setCancelUrl( $this->order->get_checkout_payment_url() )
 			->setFailureUrl( $this->getOrderCheckoutPaymentUrl( 'failed' ) )
 			->setMetadata( $this->buildMetadata( $this->order ) )
+			->setLineItems( $this->buildLineItems( $this->order ) )
 			->setExternalId( $this->order->get_order_key() );
 	}
 

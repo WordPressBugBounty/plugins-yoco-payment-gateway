@@ -27,4 +27,16 @@ class Constants {
 	public function hasCheckoutApiUrl(): bool {
 		return ! empty( $this->getCheckoutApiUrl() );
 	}
+
+	public function getPaymentApiUrl(): ?string {
+		if ( ! defined( 'YOCO_ONLINE_PAYMENT_URL' ) ) {
+			return '';
+		}
+
+		return YOCO_ONLINE_PAYMENT_URL;
+	}
+
+	public function hasPaymentApiUrl(): bool {
+		return ! empty( $this->getPaymentApiUrl() );
+	}
 }

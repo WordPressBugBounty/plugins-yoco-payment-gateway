@@ -43,13 +43,9 @@ class RefundSucceededWebhookProcessor extends WebhookProcessor {
 
 		try {
 			$request = new Refund();
-			$refund  = $request->refund( $this->order );
+			$refund  = $request->refund( $this->order, $payload );
 
-			if ( null === $refund ) {
-				return $this->sendSuccessResponse();
-			} elseif ( 'completed' === $refund->get_status() ) {
-				do_action( 'yoco_payment_gateway/payment/completed', $this->order, $payload );
-
+			if ( 'completed' === $refund->get_status() ) {
 				return $this->sendSuccessResponse();
 			} else {
 				yoco( Logger::class )->logError( sprintf( 'Failed to complete refund of order #%s - wrong order status.', $this->order->get_id() ) );
