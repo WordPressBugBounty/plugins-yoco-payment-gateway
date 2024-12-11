@@ -2,6 +2,7 @@
 
 namespace Yoco\Gateway;
 
+use WC_Abstract_Order;
 use WC_Order;
 use Yoco\Helpers\Logger;
 use Yoco\Repositories\OrdersRepository;
@@ -73,7 +74,10 @@ class Notes {
 		$this->addNote( $order, sprintf( esc_html__( 'Yoco: Received refund session ID (%s).', 'yoco_wc_payment_gateway' ), esc_html( $refund_id ) ) );
 	}
 
-	public function addNote( WC_Order $order, string $note ): int {
+	public function addNote( WC_Abstract_Order $order, string $note ): int {
+		if ( ! $order instanceof WC_Order ) {
+			return 0;
+		}
 		return $order->add_order_note( $note );
 	}
 }

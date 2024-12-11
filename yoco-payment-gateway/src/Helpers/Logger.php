@@ -2,6 +2,7 @@
 
 namespace Yoco\Helpers;
 
+use WC_Log_Handler_File;
 use WC_Log_Levels;
 use Yoco\Installation\Installation;
 use function Yoco\yoco;
@@ -45,8 +46,8 @@ class Logger {
 	private function getErrorLogFiles() {
 		if ( null === $this->error_log_files ) {
 			$this->error_log_files = array_filter(
-				\WC_Log_Handler_File::get_log_files(),
-				function( $file_name ) {
+				WC_Log_Handler_File::get_log_files(),
+				function ( $file_name ) {
 					return false !== strpos( $file_name, 'yoco-gateway-' ) ? true : false;
 				}
 			);

@@ -111,13 +111,24 @@ class PaymentStatusScheduler {
 					)
 				);
 
-				if ( 'completed' === $payment_status && true === $order->payment_complete( $payment_id ) ) {
-					yoco( Metadata::class )->updateOrderPaymentId( $order, $payment_id );
-					continue;
+				if (
+					'completed' === $payment_status
+					&& true === $order->payment_complete( $payment_id )
+				) {
+					/**
+					* Fires an action hook after a Yoco payment has been completed for an order.
+					*
+					* @param WC_Order $order       The order object.
+					* @param string   $payment_id The ID of the completed Yoco payment.
+					*
+					* @since 1.0.0
+					*/
+					do_action( 'yoco_payment_gateway/payment/completed', $order, $payment_id );
+
+					$this->remove_order( $order_id );
+				} else {
+					$this->update_order( $order_id, $payment_status );
 				}
-
-				$this->update_order( $order_id, $payment_status );
-
 			} catch ( \Throwable $th ) {
 				yoco( Logger::class )->logError( sprintf( 'Failed to handle order payment status update. %s', $th->getMessage() ) );
 			}
@@ -125,6 +136,10 @@ class PaymentStatusScheduler {
 	}
 
 	public function maybe_update_order_payment_status() {
+		// if webhook is running bail.
+		if ( get_transient( 'yoco_webhook_processing' ) ) {
+			return;
+		}
 
 		if ( isset( $_GET['key'] ) && is_order_received_page() ) {
 			$order_id = wc_get_order_id_by_order_key( sanitize_key( $_GET['key'] ) );
@@ -183,7 +198,7 @@ class PaymentStatusScheduler {
 	}
 
 	public function process_order( $order_id ) {
-
+		set_transient( 'yoco_order_processing_' . $order_id, true, 10 );
 		$order = wc_get_order( $order_id );
 
 		/**
@@ -195,9 +210,12 @@ class PaymentStatusScheduler {
 			return;
 		}
 
+
 		// If we have payment ID saved in meta this means payment was successful and we can remove order from the list.
 		if ( ! empty( yoco( Metadata::class )->getOrderPaymentId( $order ) ) ) {
 			$this->remove_order( $order->get_id() );
+
+			delete_transient( 'yoco_order_processing_' . $order->get_id() );
 			return;
 		}
 
@@ -206,14 +224,27 @@ class PaymentStatusScheduler {
 		try {
 			$data = $request->get();
 			if ( 200 !== $data['code'] ) {
+				delete_transient( 'yoco_order_processing_' . $order->get_id() );
 				return;
 			}
 
 			$payment_status = $data['body']['status'];
 			$payment_id     = $data['body']['paymentId'];
 
-			if ( 'completed' === $payment_status && true === $order->payment_complete( $payment_id ) ) {
-				yoco( Metadata::class )->updateOrderPaymentId( $order, $payment_id );
+			if (
+				'completed' === $payment_status
+				&& empty( $order->get_date_paid() )
+				&& true === $order->payment_complete( $payment_id ) ) {
+				/**
+				* Fires an action hook after a Yoco payment has been completed for an order.
+				*
+				* @param WC_Order $order       The order object.
+				* @param string   $payment_id The ID of the completed Yoco payment.
+				*
+				* @since 1.0.0
+				*/
+				do_action( 'yoco_payment_gateway/payment/completed', $order, $payment_id );
+				delete_transient( 'yoco_order_processing_' . $order->get_id() );
 			}
 		} catch ( \Throwable $th ) {
 			yoco( Logger::class )->logError( sprintf( 'Failed to handle order payment status update. %s', $th->getMessage() ) );

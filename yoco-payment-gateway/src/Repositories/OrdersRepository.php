@@ -3,6 +3,7 @@
 namespace Yoco\Repositories;
 
 use Exception;
+use WC_Abstract_Order;
 use WC_Order;
 use Yoco\Gateway\Metadata;
 use Yoco\Helpers\Logger;
@@ -11,10 +12,10 @@ use function Yoco\yoco;
 
 class OrdersRepository {
 
-	public static function getById( int $id ): ?WC_Order {
+	public static function getById( int $id ): ?WC_Abstract_Order {
 		$order = wc_get_order( $id );
 
-		return is_a( $order, WC_Order::class ) ? $order : null;
+		return is_a( $order, WC_Abstract_Order::class ) ? $order : null;
 	}
 
 	public static function getByYocoCheckoutId( string $sessionId ) {
@@ -55,7 +56,7 @@ class OrdersRepository {
 		return is_a( $order, WC_Order::class ) ? $order : null;
 	}
 
-	public static function getByYocoRefundId( string $refundId ): ?WC_Order {
+	public static function getByYocoRefundId( string $refundId ): ?WC_Abstract_Order {
 		$orders = wc_get_orders(
 			array(
 				'meta_key'     => Metadata::REFUND_ID_ORDER_META_KEY,
@@ -71,7 +72,7 @@ class OrdersRepository {
 
 		$order = array_shift( $orders );
 
-		return is_a( $order, WC_Order::class ) ? $order : null;
+		return is_a( $order, WC_Abstract_Order::class ) ? $order : null;
 	}
 
 	public function getOrders( array $args ): WC_Order {

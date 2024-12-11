@@ -44,13 +44,13 @@ class Refund {
 		}
 
 		$args = array(
-			'amount'                => $payload->getAmount() / 100,
-			'reason'                => sprintf(
+			'amount'         => $payload->getAmount() / 100,
+			'reason'         => sprintf(
 				__( 'Refund requested via Yoco Portal. Refund ID (%s)', 'yoco_wc_payment_gateway' ),
 				$payload->getId()
 			),
-			'order_id'              => $order->get_id(),
-			'refund_payment_method' => 'class_yoco_wc_payment_gateway',
+			'order_id'       => $order->get_id(),
+			'refund_payment' => true,
 		);
 
 		$refund = wc_create_refund( apply_filters( 'yoco_payment_gateway/request/refund/args', $args ) );
