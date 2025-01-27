@@ -28,7 +28,6 @@ class Gateway extends WC_Payment_Gateway {
 		$this->enabled    = $this->isEnabled();
 		$this->icon       = trailingslashit( YOCO_ASSETS_URI ) . 'images/yoco-2024.svg';
 		$this->has_fields = false;
-		$this->supports   = array( 'products', 'refunds' );
 
 		$this->title       = $this->get_option( 'title', __( 'Yoco', 'yoco_wc_payment_gateway' ) );
 		$this->description = $this->get_option( 'description', __( 'Pay securely using a credit/debit card or other payment methods via Yoco.', 'yoco_wc_payment_gateway' ) );

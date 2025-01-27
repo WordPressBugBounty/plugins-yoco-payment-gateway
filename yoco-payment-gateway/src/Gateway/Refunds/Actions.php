@@ -108,13 +108,14 @@ class Actions {
 					$refund->id
 				),
 				'order_id'       => $order->get_id(),
-				'refund_payment' => true,
+				'refund_payment' => false,
 			);
 
 			$new_refund = wc_create_refund( apply_filters( 'yoco_payment_gateway/request/refund/args', $args ) );
 
 			if ( is_wp_error( $new_refund ) ) {
 				yoco( Logger::class )->logError( 'Refund creation failed: ' . $new_refund->get_error_message() . ' code: ' . $new_refund->get_error_code() );
+				return;
 			}
 
 			do_action( 'yoco_payment_gateway/order/refunded', $new_refund, array( 'refundId' => $refund->id ) );

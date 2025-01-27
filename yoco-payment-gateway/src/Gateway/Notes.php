@@ -70,6 +70,13 @@ class Notes {
 			return;
 		}
 
+		$order_notes = wc_get_order_notes( array( 'order_id' => $order_id ) );
+		foreach ( $order_notes as $note ) {
+			if ( strpos( $note->content, 'refund session ID (' . $refund_id ) !== false ) {
+				return;
+			}
+		}
+
 		// translators: Refund ID.
 		$this->addNote( $order, sprintf( esc_html__( 'Yoco: Received refund session ID (%s).', 'yoco_wc_payment_gateway' ), esc_html( $refund_id ) ) );
 	}

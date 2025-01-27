@@ -60,10 +60,31 @@ class Request {
 	private function getHeaders() {
 		$headers = array(
 			'Content-Type'  => 'application/json',
-			'Authorization' => $this->installation->getApiBearer(),
+			'Authorization' => $this->installation->getApiBearer( $this->order->get_meta( 'yoco_order_payment_mode', true ) ),
 			'X-Product'     => 'woocommerce',
 		);
 
+		$idempotency_key = $this->getIdempotencyKey();
+
+		if ( null !== $idempotency_key ) {
+			$headers['Idempotency-Key'] = $idempotency_key;
+		}
+
 		return apply_filters( 'yoco_payment_gateway/refund/request/headers', $headers );
+	}
+
+	private function getIdempotencyKey(): ?string {
+		if ( ! isset( $_POST['security'] ) || wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['security'] ) ), 'woocommerce-order-items' ) ) {
+			return null;
+		}
+
+		if ( ! isset( $_POST['refund_amount'] ) || ! isset( $_POST['refunded_amount'] ) ) {
+			return null;
+		}
+
+		$refund_amount   = sanitize_text_field( wp_unslash( $_POST['refund_amount'] ) );
+		$refunded_amount = sanitize_text_field( wp_unslash( $_POST['refunded_amount'] ) );
+
+		return hash( 'SHA256', yoco( Metadata::class )->getOrderPaymentId( $this->order ) . $refund_amount . $refunded_amount );
 	}
 }

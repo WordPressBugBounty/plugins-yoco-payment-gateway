@@ -50,7 +50,7 @@ class Refund {
 				$payload->getId()
 			),
 			'order_id'       => $order->get_id(),
-			'refund_payment' => true,
+			'refund_payment' => false,
 		);
 
 		$refund = wc_create_refund( apply_filters( 'yoco_payment_gateway/request/refund/args', $args ) );

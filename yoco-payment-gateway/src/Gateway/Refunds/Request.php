@@ -55,7 +55,7 @@ class Request {
 	private function getHeaders() {
 		$headers = array(
 			'Content-Type'  => 'application/json',
-			'Authorization' => $this->installation->getApiBearer(),
+			'Authorization' => $this->installation->getApiBearer( $this->order->get_meta( 'yoco_order_payment_mode', true ) ),
 			'X-Product'     => 'woocommerce',
 		);
 

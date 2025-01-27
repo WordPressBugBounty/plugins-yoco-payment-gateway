@@ -5,6 +5,7 @@ namespace Yoco\Gateway\Processors;
 use WC_Order;
 use WP_Error;
 use Yoco\Gateway\Metadata;
+use Yoco\Gateway\Refunds\Actions as Refunds_Actions;
 use Yoco\Gateway\Refund\Request;
 use Yoco\Helpers\Logger;
 
@@ -24,6 +25,7 @@ class RefundProcessor {
 	public function process( WC_Order $order, float $amount ) {
 
 		try {
+			Refunds_Actions::sync_refunds( $order );
 			$request  = new Request( $order );
 			$response = $request->send( $amount );
 
