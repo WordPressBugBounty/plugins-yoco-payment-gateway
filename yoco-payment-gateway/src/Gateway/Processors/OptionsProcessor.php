@@ -34,8 +34,13 @@ class OptionsProcessor {
 
 			$response = $installationRequest->send();
 
-			// If we get 500 error, reset Idempotence Key and retry the request.
-			if ( 500 === (int) $response['code'] ) {
+			// Retry the request for 408, 409, 425, 429, 502, 503, 504 response codes.
+			if ( in_array( $response['code'], array( 408, 409, 425, 429, 502, 503, 504 ) ) ) {
+				$response = $installationRequest->send();
+			}
+
+			// If we get 500 response code, reset Idempotence Key and retry the request.
+			if ( in_array( $response['code'], array( 500 ) ) ) {
 				add_filter( 'yoco_payment_gateway/installation/request/headers', array( $this, 'resetIdempotenceKey' ) );
 
 				$response = $installationRequest->send();

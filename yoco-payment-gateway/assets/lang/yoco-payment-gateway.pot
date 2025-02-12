@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/woocommerce-payment-plugin\n"
-"POT-Creation-Date: 2025-01-23 11:29:27+00:00\n"
+"POT-Creation-Date: 2025-02-12 11:30:04+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -132,37 +132,37 @@ msgstr ""
 msgid "Yoco: Payment canceled by the customer."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:50
 #: src/Gateway/Processors/OptionsProcessor.php:55
+#: src/Gateway/Processors/OptionsProcessor.php:60
 msgid "Failed to request installation. %s"
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:69
+#: src/Gateway/Processors/OptionsProcessor.php:74
 msgid "Response missing installation ID."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:80
+#: src/Gateway/Processors/OptionsProcessor.php:85
 msgid "Response missing subscription secret."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:89
+#: src/Gateway/Processors/OptionsProcessor.php:94
 msgid "Plugin installed successfully."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:93
+#: src/Gateway/Processors/OptionsProcessor.php:98
 msgid "Failed to install plugin. %s"
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:98
-#: src/Gateway/Processors/OptionsProcessor.php:104
+#: src/Gateway/Processors/OptionsProcessor.php:103
+#: src/Gateway/Processors/OptionsProcessor.php:109
 msgid "Please check the formatting of the secret key."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:100
+#: src/Gateway/Processors/OptionsProcessor.php:105
 msgid "Test secret key seem to be invalid."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:106
+#: src/Gateway/Processors/OptionsProcessor.php:111
 msgid "Live secret key seem to be invalid."
 msgstr ""
 
