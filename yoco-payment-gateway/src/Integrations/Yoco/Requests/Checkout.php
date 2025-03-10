@@ -24,9 +24,9 @@ class Checkout {
 		return ( new Payload() )
 			->setAmount( $this->getOrderTotal() )
 			->setCurrency( $this->order->get_currency() )
-			->setSuccessUrl( $this->order->get_checkout_order_received_url() )
-			->setCancelUrl( $this->order->get_checkout_payment_url() )
-			->setFailureUrl( $this->getOrderCheckoutPaymentUrl( 'failed' ) )
+			->setSuccessUrl( $this->absoluteUrl( $this->order->get_checkout_order_received_url() ) )
+			->setCancelUrl( $this->absoluteUrl( $this->order->get_checkout_payment_url() ) )
+			->setFailureUrl( $this->absoluteUrl( $this->getOrderCheckoutPaymentUrl( 'failed' ) ) )
 			->setMetadata( $this->buildMetadata( $this->order ) )
 			->setLineItems( $this->buildLineItems( $this->order ) )
 			->setExternalId( $this->order->get_order_key() );
@@ -108,5 +108,13 @@ class Checkout {
 			),
 			$this->order->get_checkout_order_received_url()
 		);
+	}
+
+	private function absoluteUrl( string $url ): string {
+		if ( ! preg_match( '/^https?:\/\//', $url ) ) {
+			$url = home_url( $url );
+		}
+
+		return $url;
 	}
 }

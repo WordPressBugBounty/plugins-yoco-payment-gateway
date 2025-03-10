@@ -5,11 +5,11 @@
  * Description: Take debit and credit card payments on your store.
  * Author: Yoco
  * Author URI: https://www.yoco.com
- * Version: 3.8.3
+ * Version: 3.8.4
  * Requires at least: 5.0.0
  * Tested up to: 6.7
  * WC requires at least: 8.0.0
- * WC tested up to: 9.6
+ * WC tested up to: 9.7
  * Requires Plugins: woocommerce
  * Text Domain: yoco_wc_payment_gateway
  *
