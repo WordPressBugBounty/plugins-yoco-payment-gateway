@@ -2,9 +2,9 @@
 Contributors: Yoco
 Tags: woocommerce,payment gateway
 Requires at least: 5.0.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4.0
-Stable tag: 3.8.4
+Stable tag: 3.8.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,11 @@ Set the plugin to Test mode, fetch your Test Keys from the [Yoco Business Porta
 More detailed installation notes can be found in [Yoco Gateway for WooCommerce: User Guide.](https://support.yoco.help/s/article/Yoco-for-WooCommerce) or you can [get in touch with us](https://www.yoco.com/za/contact/).
 
 == Changelog ==
+
+= 3.8.5 =
+
+* Fix prevent GET request when order is missing Checkout ID.
+* Bumped WP tested up to 6.8 and WC tested up to 9.8.
 
 = 3.8.4 =
 

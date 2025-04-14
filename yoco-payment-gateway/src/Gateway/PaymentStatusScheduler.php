@@ -55,6 +55,12 @@ class PaymentStatusScheduler {
 				continue;
 			}
 
+			if ( empty( yoco( Metadata::class )->getOrderCheckoutId( $order ) ) ) {
+				yoco( Logger::class )->logError( sprintf( 'Failed to process order payment. Order #%s is missing Checkout ID.', $order_id ) );
+				$this->remove_order( $order_id );
+				continue;
+			}
+
 			// If order has payment ID saved in meta this means payment was successful and we remove order from the list.
 			if ( ! empty( yoco( Metadata::class )->getOrderPaymentId( $order ) ) ) {
 				$this->remove_order( $order_id );
@@ -206,10 +212,19 @@ class PaymentStatusScheduler {
 		 *
 		 * @var WC_Order $order
 		*/
-		if ( ! $order instanceof WC_Order || 'class_yoco_wc_payment_gateway' !== $order->get_payment_method() ) {
+		if ( ! $order instanceof WC_Order ) {
 			return;
 		}
 
+		// If somehow we got order with payment method other than Yoco or without Checkout ID remove order from the list.
+		if (
+			'class_yoco_wc_payment_gateway' !== $order->get_payment_method()
+			|| empty( yoco( Metadata::class )->getOrderCheckoutId( $order ) )
+		) {
+			$this->remove_order( $order->get_id() );
+			delete_transient( 'yoco_order_processing_' . $order->get_id() );
+			return;
+		}
 
 		// If we have payment ID saved in meta this means payment was successful and we can remove order from the list.
 		if ( ! empty( yoco( Metadata::class )->getOrderPaymentId( $order ) ) ) {

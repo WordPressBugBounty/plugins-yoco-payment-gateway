@@ -24,6 +24,11 @@ class Actions {
 		try {
 			$refunds_responce = $request->get();
 
+			/**
+			 * Refunds response.
+			 *
+			 * @var array{refunds: array<int, object>} $body
+			 */
 			$body = wp_remote_retrieve_body( $refunds_responce );
 
 			if ( ! isset( $body['refunds'] ) ) {
@@ -42,6 +47,7 @@ class Actions {
 			$refunds = $body['refunds'];
 		} catch ( \Throwable $th ) {
 			yoco( Logger::class )->logError( sprintf( 'Failed to sync refunds. %s', $th->getMessage() ) );
+			return;
 		}
 
 		// Remove already synced refunds from $refunds array.

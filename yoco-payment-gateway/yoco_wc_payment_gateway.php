@@ -5,11 +5,11 @@
  * Description: Take debit and credit card payments on your store.
  * Author: Yoco
  * Author URI: https://www.yoco.com
- * Version: 3.8.4
+ * Version: 3.8.5
  * Requires at least: 5.0.0
- * Tested up to: 6.7
+ * Tested up to: 6.8
  * WC requires at least: 8.0.0
- * WC tested up to: 9.7
+ * WC tested up to: 9.8
  * Requires Plugins: woocommerce
  * Text Domain: yoco_wc_payment_gateway
  *
@@ -53,11 +53,11 @@ add_action(
 
 add_action(
 	'woocommerce_blocks_loaded',
-	function() {
+	function () {
 		if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
 			add_action(
 				'woocommerce_blocks_payment_method_type_registration',
-				function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+				function ( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
 					$payment_method_registry->register( new Yoco\Gateway\BlocksCheckout() );
 				}
 			);
@@ -83,7 +83,7 @@ add_action(
  */
 add_action(
 	'admin_notices',
-	function() {
+	function () {
 		if ( class_exists( 'WooCommerce' ) ) {
 			return;
 		}
@@ -91,7 +91,7 @@ add_action(
 		echo '<div class="error"><p style="display: flex; gap: 0.5rem; align-items: center;">';
 		echo '<img style="height:20px" src="' . esc_url( YOCO_ASSETS_URI ) . '/images/yoco-2024.svg"/>';
 		echo '<strong>';
-		echo sprintf(
+		printf(
 			/* translators: %s WooCommerce download URL link. */
 			esc_html__( 'Yoco Payment Gateway requires WooCommerce to be installed and active. You can read how to install %s here.', 'yoco_wc_payment_gateway' ),
 			'<a href="https://woo.com/document/installing-uninstalling-woocommerce/" target="_blank">WooCommerce</a>'
@@ -114,27 +114,26 @@ register_deactivation_hook(
 	}
 );
 
-/**
- * Migrate Yoco payment gateway options if necessary
- */
-function maybe_migrate_yoco_payment_gateway_options() {
-	if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
-		return;
+add_action(
+	'wp_loaded',
+	// Maybe update plugin version option.
+	function () {
+		if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
+			return;
+		}
+
+		$version_option_key = 'yoco_wc_payment_gateway_version';
+		$installed_version  = get_option( $version_option_key );
+
+		if ( YOCO_PLUGIN_VERSION === $installed_version ) {
+			return;
+		}
+
+		if ( version_compare( $installed_version, '3.0.0', '<' ) ) {
+			$gateway = yoco( \Yoco\Gateway\Provider::class )->getGateway();
+			$gateway->update_admin_options();
+		}
+
+		update_option( $version_option_key, YOCO_PLUGIN_VERSION );
 	}
-
-	$version_option_key = 'yoco_wc_payment_gateway_version';
-	$installed_version  = get_option( $version_option_key );
-
-	if ( YOCO_PLUGIN_VERSION === $installed_version ) {
-		return;
-	}
-
-	if ( version_compare( $installed_version, '3.0.0', '<' ) ) {
-		$gateway = yoco( \Yoco\Gateway\Provider::class )->getGateway();
-		$gateway->update_admin_options();
-	}
-
-	update_option( $version_option_key, YOCO_PLUGIN_VERSION );
-}
-
-add_action( 'wp_loaded', 'maybe_migrate_yoco_payment_gateway_options' );
+);

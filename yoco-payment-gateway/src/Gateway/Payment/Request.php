@@ -36,8 +36,13 @@ class Request {
 
 	public function get(): array {
 		try {
+			$checkout_id = yoco( Metadata::class )->getOrderCheckoutId( $this->order );
+			if ( empty( $checkout_id ) ) {
+				throw new \Exception( 'Yoco Checkout ID not found.' );
+			}
+
 			$client = new Client();
-			$url    = $this->getUrl() . '/' . yoco( Metadata::class )->getOrderCheckoutId( $this->order );
+			$url    = $this->getUrl() . '/' . $checkout_id;
 			$args   = array( 'headers' => $this->getHeadersForMode() );
 
 			return $client->get( $url, $args );

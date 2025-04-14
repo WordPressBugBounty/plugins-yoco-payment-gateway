@@ -37,7 +37,7 @@ class Client {
 	public function get( string $url, array $args ) {
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			yoco( Logger::class )->logError( 'Invalid URL for GET request.' );
-			throw new Exception( __( 'Invalid URL for GET request.', 'yoco_wc_payment_gateway' ) );
+			throw new Exception( 'Invalid URL for GET request.' );
 		}
 
 		$response = wp_remote_get( $url, $args );
