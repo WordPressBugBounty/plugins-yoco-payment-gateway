@@ -70,10 +70,15 @@ final class BlocksCheckout extends AbstractPaymentMethodType {
 	 */
 	public function get_payment_method_data() {
 		return array(
-			'title'       => $this->get_setting( 'title' ),
-			'description' => $this->get_setting( 'description' ),
-			'supports'    => $this->get_supported_features(),
-			'logo_url'    => YOCO_ASSETS_URI . '/images/yoco-2024.svg',
+			'title'           => $this->get_setting( 'title' ),
+			'description'     => $this->get_setting( 'description' ),
+			'supports'        => $this->get_supported_features(),
+			'logo_url'        => YOCO_ASSETS_URI . '/images/yoco-2024.svg',
+			'providers_icons' => array(
+				'Visa'       => YOCO_ASSETS_URI . '/images/visa.svg',
+				'MasterCard' => YOCO_ASSETS_URI . '/images/master.svg',
+				'MasterPass' => YOCO_ASSETS_URI . '/images/masterpass.svg',
+			),
 		);
 	}
 

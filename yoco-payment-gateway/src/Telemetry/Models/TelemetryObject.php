@@ -78,7 +78,7 @@ class TelemetryObject {
 			);
 
 			foreach ( $endpoints as $endpoint ) {
-				$result    = wp_remote_post( $this->getHostUrl() . $endpoint, $args );
+				$result     = wp_remote_post( $this->getHostUrl() . $endpoint, $args );
 				$webhooks[] = array(
 					'endpoint' => $endpoint,
 					'status'   => 200 === wp_remote_retrieve_response_code( $result ),

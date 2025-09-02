@@ -39,6 +39,10 @@ class Metadata {
 		return $this->getOrderMeta( $order, self::CHECKOUT_URL_ORDER_META_KEY );
 	}
 
+	public function getOrderCheckoutMode( WC_Order $order ): string {
+		return $this->getOrderMeta( $order, self::CHECKOUT_MODE_ORDER_META_KEY );
+	}
+
 	public function updateOrderPaymentId( WC_Order $order, $payload ): void {
 		$order_payment_id = $this->getOrderPaymentId( $order );
 		$payment_id       = $payload instanceof WebhookPayload ? $payload->getPaymentId() : $payload;

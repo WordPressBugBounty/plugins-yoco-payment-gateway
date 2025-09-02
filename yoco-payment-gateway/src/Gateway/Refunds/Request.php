@@ -54,9 +54,10 @@ class Request {
 
 	private function getHeaders() {
 		$headers = array(
-			'Content-Type'  => 'application/json',
-			'Authorization' => $this->installation->getApiBearer( $this->order->get_meta( 'yoco_order_payment_mode', true ) ),
-			'X-Product'     => 'woocommerce',
+			'Content-Type'     => 'application/json',
+			'Authorization'    => $this->installation->getApiBearer( yoco( Metadata::class )->getOrderCheckoutMode( $this->order ) ),
+			'X-Product'        => 'woocommerce',
+			'X-Correlation-ID' => yoco( Metadata::class )->getOrderCheckoutId( $this->order ),
 		);
 
 		return apply_filters( 'yoco_payment_gateway/refunds/request/headers', $headers );

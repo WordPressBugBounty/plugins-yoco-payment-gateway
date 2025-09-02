@@ -19,6 +19,8 @@ class Gateway extends WC_Payment_Gateway {
 
 	public ?Debug $debug = null;
 
+	public array $providers_icons = array();
+
 	public function __construct() {
 		$this->credentials = new Credentials( $this );
 		$this->mode        = new Mode( $this );
@@ -26,8 +28,14 @@ class Gateway extends WC_Payment_Gateway {
 
 		$this->id         = 'class_yoco_wc_payment_gateway';
 		$this->enabled    = $this->isEnabled();
-		$this->icon       = trailingslashit( YOCO_ASSETS_URI ) . 'images/yoco-2024.svg';
 		$this->has_fields = false;
+
+		$this->icon            = trailingslashit( YOCO_ASSETS_URI ) . 'images/yoco-2024.svg';
+		$this->providers_icons = array(
+			'Visa'       => trailingslashit( YOCO_ASSETS_URI ) . 'images/visa.svg',
+			'MasterCard' => trailingslashit( YOCO_ASSETS_URI ) . 'images/master.svg',
+			'MasterPass' => trailingslashit( YOCO_ASSETS_URI ) . 'images/masterpass.svg',
+		);
 
 		$this->title       = $this->get_option( 'title', __( 'Yoco', 'yoco_wc_payment_gateway' ) );
 		$this->description = $this->get_option( 'description', __( 'Pay securely using a credit/debit card or other payment methods via Yoco.', 'yoco_wc_payment_gateway' ) );
@@ -66,9 +74,17 @@ class Gateway extends WC_Payment_Gateway {
 	 */
 	public function get_icon() {
 
-		$icon = '<img class="yoco-payment-method-icon" style="max-height:1em;width:auto;" alt="' . esc_attr( $this->title ) . '" width="100" height="24" src="' . esc_url( $this->icon ) . '"/>';
+		$icons = '<img class="yoco-payment-method-icon" style="max-height:1em;width:auto;margin-inline-start:1ch;" alt="' . esc_attr( $this->title ) . '" width="100" height="24" src="' . esc_url( $this->icon ) . '"/>';
 
-		return apply_filters( 'woocommerce_gateway_icon', $icon, $this->id );
+		$icons .= ! empty( $this->providers_icons ) ? '<span style="float: right;">' : '';
+
+		foreach ( $this->providers_icons as $provider_name => $provider_icon ) {
+			$icons .= '<img class="yoco-payment-method-icon" style="max-height:1.2em;width:auto;" alt="' . esc_attr( $provider_name ) . ' logo" width="38" height="24" src="' . esc_url( $provider_icon ) . '"/>';
+		}
+
+		$icons .= ! empty( $this->providers_icons ) ? '</span>' : '';
+
+		return apply_filters( 'woocommerce_gateway_icon', $icons, $this->id );
 	}
 
 	public function process_payment( $order_id ): ?array {
