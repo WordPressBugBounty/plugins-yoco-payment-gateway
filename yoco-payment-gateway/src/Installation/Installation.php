@@ -8,6 +8,10 @@ use Yoco\Core\Constants;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Installation {
 
 	private ?array $settings = null;
@@ -108,9 +112,9 @@ class Installation {
 		$updated = update_option( $key, $id );
 
 		if ( false === $updated ) {
-			yoco( Logger::class )->logError( 'Failed to save Webhook Secret option.', 'yoco_wc_payment_gateway' );
+			yoco( Logger::class )->logError( 'Failed to save Webhook Secret option.', 'yoco-payment-gateway' );
 
-			throw new Exception( __( 'Failed to save Webhook Secret option.', 'yoco_wc_payment_gateway' ) );
+			throw new Exception( esc_html__( 'Failed to save Webhook Secret option.', 'yoco-payment-gateway' ) );
 		}
 	}
 
@@ -131,7 +135,7 @@ class Installation {
 		if ( false === $updated ) {
 			yoco( Logger::class )->logError( 'Failed to save installation ID option.' );
 
-			throw new Exception( __( 'Failed to save installation ID option.', 'yoco_wc_payment_gateway' ) );
+			throw new Exception( esc_html__( 'Failed to save installation ID option.', 'yoco-payment-gateway' ) );
 		}
 	}
 

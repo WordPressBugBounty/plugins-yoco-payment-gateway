@@ -6,6 +6,10 @@ use Yoco\Core\Environment;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Versioner {
 
 	public static function getDependenciesVersion(): string {

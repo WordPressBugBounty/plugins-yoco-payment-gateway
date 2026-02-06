@@ -4,6 +4,10 @@ namespace Yoco\Core;
 
 use Yoco\Gateway\Refunds\Actions as Refunds_Actions;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Actions {
 
 	public function __construct() {
@@ -20,13 +24,13 @@ class Actions {
 		}
 
 		$url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=class_yoco_wc_payment_gateway' );
-		array_unshift( $links, "<a href=\"{$url}\">" . __( 'Settings', 'yoco_wc_payment_gateway' ) . '</a>' );
+		array_unshift( $links, "<a href=\"{$url}\">" . __( 'Settings', 'yoco-payment-gateway' ) . '</a>' );
 
 		return $links;
 	}
 
 	public function register_sync_refunds_action( $actions ) {
-		$actions['yoco_sync_refunds'] = __( 'Yoco: Sync Refunds', 'yoco_wc_payment_gateway' );
+		$actions['yoco_sync_refunds'] = __( 'Yoco: Sync Refunds', 'yoco-payment-gateway' );
 
 		return $actions;
 	}

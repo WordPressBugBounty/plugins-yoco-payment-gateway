@@ -1,32 +1,28 @@
-# Copyright (C) 2025 
+# Copyright (C) 2026 
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: "
-"https://wordpress.org/support/plugin/woocommerce-payment-plugin\n"
-"POT-Creation-Date: 2025-02-12 11:30:04+00:00\n"
+"https://wordpress.org/support/plugin/yoco-payment-gateway\n"
+"POT-Creation-Date: 2026-01-06 13:02:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: node-wp-i18n 1.2.7\n"
 
-#: src/Core/Actions.php:23
+#: src/Core/Actions.php:27
 msgid "Settings"
 msgstr ""
 
-#: src/Core/Actions.php:29
+#: src/Core/Actions.php:33
 msgid "Yoco: Sync Refunds"
 msgstr ""
 
-#: src/Core/Language.php:22
-msgid "Failed to load plugin textdomain."
-msgstr ""
-
-#: src/Core/Setup.php:66
+#: src/Core/Setup.php:70
 #. translators: link open and link closing tag.
 msgid ""
 "Error: plugin suspended due to missing Installation ID. Please visit "
@@ -34,7 +30,7 @@ msgid ""
 "are correct."
 msgstr ""
 
-#: src/Core/Setup.php:92
+#: src/Core/Setup.php:96
 #. translators: link open and link closing tag.
 msgid ""
 "Error: plugin suspended due to missing Subscription ID. Please visit "
@@ -42,235 +38,264 @@ msgid ""
 "are correct."
 msgstr ""
 
-#: src/Core/Setup.php:106
+#: src/Core/Setup.php:110
 msgid ""
 "Error: plugin suspended due to incompatible PHP version. Required PHP "
 "version is 7.4.0 or higher."
 msgstr ""
 
-#: src/Core/Setup.php:111
+#: src/Core/Setup.php:115
 msgid ""
 "Error: plugin suspended due to incompatible WordPress version. Required "
 "WordPress version 5.0 or higher."
 msgstr ""
 
-#: src/Core/Setup.php:116
+#: src/Core/Setup.php:120
 msgid ""
 "Error: plugin suspended due to incompatible WooCommerce version. Required "
 "WooCommerce version 4.0 or higher."
 msgstr ""
 
-#: src/Core/Singleton.php:36
+#: src/Core/Singleton.php:40
 msgid "Cannot unserialize singleton"
 msgstr ""
 
-#: src/Gateway/Admin/Notices.php:22
+#: src/Gateway/Admin/Notices.php:26
 msgid "Test mode enabled."
 msgstr ""
 
-#: src/Gateway/Admin/Notices.php:33
+#: src/Gateway/Admin/Notices.php:38
+#. translators: Currency symbol.
 msgid "Currency is not supported (%s)."
 msgstr ""
 
-#: src/Gateway/Admin/Notices.php:44
+#: src/Gateway/Admin/Notices.php:49
 msgid "Payment method not available for unsafe websites (SSL)."
 msgstr ""
 
-#: src/Gateway/Checkout/Method.php:21 src/Gateway/Checkout/Method.php:35
-#: src/Gateway/Gateway.php:32 src/Gateway/Settings.php:33
+#: src/Gateway/Checkout/Method.php:25 src/Gateway/Checkout/Method.php:39
+#: src/Gateway/Gateway.php:48 src/Gateway/Settings.php:37
 msgid "Yoco"
 msgstr ""
 
-#: src/Gateway/Gateway.php:33 src/Gateway/Settings.php:40
+#: src/Gateway/Gateway.php:49 src/Gateway/Settings.php:44
 msgid "Pay securely using a credit/debit card or other payment methods via Yoco."
 msgstr ""
 
-#: src/Gateway/Gateway.php:35 src/Helpers/Admin/Notices.php:50
+#: src/Gateway/Gateway.php:51 src/Helpers/Admin/Notices.php:54
 msgid "Yoco Payments"
 msgstr ""
 
-#: src/Gateway/Gateway.php:36
+#: src/Gateway/Gateway.php:52
 msgid "Yoco Payments."
 msgstr ""
 
-#: src/Gateway/Gateway.php:112
+#: src/Gateway/Gateway.php:115
+msgid "First name"
+msgstr ""
+
+#: src/Gateway/Gateway.php:122
+msgid "Last name"
+msgstr ""
+
+#: src/Gateway/Gateway.php:160
+#. translators: 1. field name, 2. invalid characters list
+msgid ""
+"%1$s field contains invalid character: \"%2$s\". Please remove it to "
+"continue."
+msgid_plural ""
+"%1$s field contains invalid characters: \"%2$s\". Please remove them to "
+"continue."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Gateway/Gateway.php:226
+msgid "Can't perform payment. Invalid order."
+msgstr ""
+
+#: src/Gateway/Gateway.php:283
+#. translators: Gateway mode production|test.
 msgid ""
 "Your gateway is not installed. You must apply and save the plugin %s "
 "secrets."
 msgstr ""
 
-#: src/Gateway/Notes.php:36
+#: src/Gateway/Notes.php:40
 #. translators: Checkout Session ID.
 msgid "Yoco: Received checkout session ID (%s)."
 msgstr ""
 
-#: src/Gateway/Notes.php:55
+#: src/Gateway/Notes.php:59
 #. translators: Payment ID.
 msgid "Yoco: Received payment session ID (%s)."
 msgstr ""
 
-#: src/Gateway/Notes.php:81
+#: src/Gateway/Notes.php:85
 #. translators: Refund ID.
 msgid "Yoco: Received refund session ID (%s)."
 msgstr ""
 
-#: src/Gateway/PaymentStatusScheduler.php:70
+#: src/Gateway/PaymentStatusScheduler.php:80
 #. translators: 1: attempt number, 2: status.
 msgid "Yoco: Failed to process payment after %d attempts"
 msgstr ""
 
-#: src/Gateway/PaymentStatusScheduler.php:108
+#: src/Gateway/PaymentStatusScheduler.php:118
 #. translators: 1: attempt number, 2: status.
 msgid "Yoco: Payment status update attempt #%1$d -- obtained status: %2$s"
 msgstr ""
 
-#: src/Gateway/PaymentStatusScheduler.php:160
+#: src/Gateway/PaymentStatusScheduler.php:170
 msgid "Yoco: Payment capture failed."
 msgstr ""
 
-#: src/Gateway/PaymentStatusScheduler.php:191
+#: src/Gateway/PaymentStatusScheduler.php:201
 msgid "Yoco: Payment canceled by the customer."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:55
 #: src/Gateway/Processors/OptionsProcessor.php:60
+#: src/Gateway/Processors/OptionsProcessor.php:66
+#. translators: Error message.
 msgid "Failed to request installation. %s"
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:74
+#: src/Gateway/Processors/OptionsProcessor.php:80
 msgid "Response missing installation ID."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:85
+#: src/Gateway/Processors/OptionsProcessor.php:91
 msgid "Response missing subscription secret."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:94
+#: src/Gateway/Processors/OptionsProcessor.php:100
 msgid "Plugin installed successfully."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:98
+#: src/Gateway/Processors/OptionsProcessor.php:105
+#. translators: Error message.
 msgid "Failed to install plugin. %s"
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:103
-#: src/Gateway/Processors/OptionsProcessor.php:109
+#: src/Gateway/Processors/OptionsProcessor.php:110
+#: src/Gateway/Processors/OptionsProcessor.php:116
 msgid "Please check the formatting of the secret key."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:105
+#: src/Gateway/Processors/OptionsProcessor.php:112
 msgid "Test secret key seem to be invalid."
 msgstr ""
 
-#: src/Gateway/Processors/OptionsProcessor.php:111
+#: src/Gateway/Processors/OptionsProcessor.php:118
 msgid "Live secret key seem to be invalid."
 msgstr ""
 
-#: src/Gateway/Processors/PaymentProcessor.php:19
-msgid "You must have an order with a minimum of R2,00 to place your order."
+#: src/Gateway/Processors/PaymentProcessor.php:31
+#: src/Gateway/Processors/PaymentProcessor.php:36
+#. translators: order total.
+msgid "A minimum order of R2.00 is required to proceed. Your order total is %s."
 msgstr ""
 
-#: src/Gateway/Processors/PaymentProcessor.php:52
+#: src/Gateway/Processors/PaymentProcessor.php:69
+#: src/Gateway/Processors/PaymentProcessor.php:73
 msgid "Your order could not be processed by Yoco - please try again later."
 msgstr ""
 
-#: src/Gateway/Refunds/Actions.php:107
-#: src/Integrations/Yoco/Requests/Refund.php:49
+#: src/Gateway/Refunds/Actions.php:118
+#: src/Integrations/Yoco/Requests/Refund.php:50
+#. translators: Refund ID.
+#. translators: Refound ID.
 msgid "Refund requested via Yoco Portal. Refund ID (%s)"
 msgstr ""
 
-#: src/Gateway/Settings.php:22
+#: src/Gateway/Settings.php:26
 msgid "Enable/Disable"
 msgstr ""
 
-#: src/Gateway/Settings.php:23
+#: src/Gateway/Settings.php:27
 msgid "Enable Yoco Payments"
 msgstr ""
 
-#: src/Gateway/Settings.php:29
+#: src/Gateway/Settings.php:33
 msgid "Title"
 msgstr ""
 
-#: src/Gateway/Settings.php:32
+#: src/Gateway/Settings.php:36
 msgid "Gateway title visible on checkout."
 msgstr ""
 
-#: src/Gateway/Settings.php:36
+#: src/Gateway/Settings.php:40
 msgid "Description"
 msgstr ""
 
-#: src/Gateway/Settings.php:39
+#: src/Gateway/Settings.php:43
 msgid "Gateway description visible on checkout."
 msgstr ""
 
-#: src/Gateway/Settings.php:44 src/Gateway/Settings.php:45
+#: src/Gateway/Settings.php:48 src/Gateway/Settings.php:49
 msgid "Mode"
 msgstr ""
 
-#: src/Gateway/Settings.php:47
+#: src/Gateway/Settings.php:51
 msgid ""
 "Test mode allow you to test the plugin without processing money.<br>Set the "
 "plugin to Live mode and click on \"Save changes\" for real customers to use "
 "it."
 msgstr ""
 
-#: src/Gateway/Settings.php:55 src/Gateway/Settings.php:57
+#: src/Gateway/Settings.php:59 src/Gateway/Settings.php:61
 msgid "Live Secret Key"
 msgstr ""
 
-#: src/Gateway/Settings.php:61 src/Gateway/Settings.php:63
+#: src/Gateway/Settings.php:65 src/Gateway/Settings.php:67
 msgid "Test Secret Key"
 msgstr ""
 
-#: src/Gateway/Settings.php:67
+#: src/Gateway/Settings.php:71
 msgid "Debug"
 msgstr ""
 
-#: src/Gateway/Settings.php:68
+#: src/Gateway/Settings.php:72
 msgid "Enable logging"
 msgstr ""
 
-#: src/Gateway/Settings.php:74
+#: src/Gateway/Settings.php:78
 msgid "Error logs"
 msgstr ""
 
-#: src/Gateway/Settings.php:76
+#: src/Gateway/Settings.php:80
 msgid "Click on the field to copy"
 msgstr ""
 
-#: src/Gateway/Settings.php:78
+#: src/Gateway/Settings.php:82
 msgid "No error logs"
 msgstr ""
 
-#: src/Gateway/Settings.php:81
+#: src/Gateway/Settings.php:85
 msgid "Logs copied"
 msgstr ""
 
-#: src/Gateway/Settings.php:108
+#: src/Gateway/Settings.php:112
 msgid "Yoco: Checkout session canceled."
 msgstr ""
 
-#: src/Gateway/Settings.php:114
+#: src/Gateway/Settings.php:118
 msgid "Yoco: Checkout session failed."
 msgstr ""
 
-#: src/Helpers/Http/Client.php:14
+#: src/Helpers/Http/Client.php:18
 msgid "Invalid URL for POST request."
 msgstr ""
 
-#: src/Helpers/Http/Client.php:40
-msgid "Invalid URL for GET request."
-msgstr ""
-
 #: src/Init.php:114
-msgid "Class %1$s hasn't been binded!"
+#. translators: Class Name.
+msgid "Class %1$s not binded!"
 msgstr ""
 
-#: src/Installation/Installation.php:113
+#: src/Installation/Installation.php:117
 msgid "Failed to save Webhook Secret option."
 msgstr ""
 
-#: src/Installation/Installation.php:134
+#: src/Installation/Installation.php:138
 msgid "Failed to save installation ID option."
 msgstr ""
 
@@ -282,37 +307,41 @@ msgstr ""
 msgid "from"
 msgstr ""
 
-#: src/Integrations/Yoco/Webhooks/Controllers/WebhookController.php:64
+#: src/Integrations/Yoco/Webhooks/Controllers/WebhookController.php:68
 msgid "Method not allowed"
 msgstr ""
 
-#: src/Integrations/Yoco/Webhooks/Events/WebhookEventsManager.php:51
+#: src/Integrations/Yoco/Webhooks/Events/WebhookEventsManager.php:57
+#. translators: Event type.
 msgid "Unknown event type to process: %s."
 msgstr ""
 
-#: src/Integrations/Yoco/Webhooks/Events/WebhookEventsManager.php:61
+#: src/Integrations/Yoco/Webhooks/Events/WebhookEventsManager.php:69
+#. translators: Event Type.
 msgid "Unknown event type to parse: %s."
 msgstr ""
 
-#: src/Integrations/Yoco/Webhooks/Parsers/PaymentWebhookPayloadParser.php:37
-#: src/Integrations/Yoco/Webhooks/Parsers/RefundWebhookPayloadParser.php:48
+#: src/Integrations/Yoco/Webhooks/Parsers/PaymentWebhookPayloadParser.php:42
+#: src/Integrations/Yoco/Webhooks/Parsers/RefundWebhookPayloadParser.php:53
+#. translators: Error message.
 msgid "Webhook request body is invalid. Violated fields: %s."
 msgstr ""
 
-#: src/Integrations/Yoco/Webhooks/Processors/RefundFailedWebhookProcessor.php:45
+#: src/Integrations/Yoco/Webhooks/Processors/RefundFailedWebhookProcessor.php:49
 #. translators: message.
 msgid "Yoco: %s"
 msgstr ""
 
-#: src/Integrations/Yoco/Webhooks/Processors/RefundFailedWebhookProcessor.php:46
+#: src/Integrations/Yoco/Webhooks/Processors/RefundFailedWebhookProcessor.php:50
 msgid "Yoco: Failed to refund the order."
 msgstr ""
 
-#: src/Repositories/OrdersRepository.php:101
+#: src/Repositories/OrdersRepository.php:106
+#. translators: Order ID.
 msgid "Order ID (%s) is not instance of WC_Order."
 msgstr ""
 
-#: yoco_wc_payment_gateway.php:96
+#: yoco_wc_payment_gateway.php:98
 #. translators: %s WooCommerce download URL link.
 msgid ""
 "Yoco Payment Gateway requires WooCommerce to be installed and active. You "

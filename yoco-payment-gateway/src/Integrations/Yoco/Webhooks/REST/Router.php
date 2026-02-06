@@ -6,6 +6,10 @@ use ReflectionClass;
 use Yoco\Integrations\Yoco\Webhooks\REST\Routes\Webhook;
 use Yoco\Helpers\Logs;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Router {
 
 	private array $routes = array();

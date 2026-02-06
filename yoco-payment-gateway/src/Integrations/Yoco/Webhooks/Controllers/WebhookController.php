@@ -9,6 +9,10 @@ use Yoco\Integrations\Yoco\Webhooks\Events\WebhookEventsManager;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class WebhookController {
 
 	private ?WP_REST_Request $request = null;
@@ -61,7 +65,7 @@ class WebhookController {
 	public function handleUnallowedRequests(): WP_REST_Response {
 		return new WP_REST_Response(
 			array(
-				'message' => __( 'Method not allowed', 'yoco_wc_payment_gateway' ),
+				'message' => __( 'Method not allowed', 'yoco-payment-gateway' ),
 			),
 			405
 		);

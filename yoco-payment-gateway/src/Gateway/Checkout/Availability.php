@@ -8,6 +8,10 @@ use Yoco\Installations\InstallationsManager;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Availability {
 
 	public function __construct() {

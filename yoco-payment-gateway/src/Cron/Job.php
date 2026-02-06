@@ -2,6 +2,10 @@
 
 namespace Yoco\Cron;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 abstract class Job implements JobInterface {
 
 	protected string $action = '';

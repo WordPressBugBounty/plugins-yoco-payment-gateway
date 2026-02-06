@@ -2,6 +2,10 @@
 
 namespace Yoco\Helpers\Security;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class SSL {
 
 	public function isSecure(): bool {

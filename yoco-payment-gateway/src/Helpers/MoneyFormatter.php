@@ -2,6 +2,10 @@
 
 namespace Yoco\Helpers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class MoneyFormatter {
 
 	public function format( $value, array $options = array() ): int {

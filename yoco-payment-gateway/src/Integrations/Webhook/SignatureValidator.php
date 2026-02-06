@@ -8,6 +8,10 @@ use Yoco\Integrations\Webhook\Vendors\WebhookSignatureValidator;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class SignatureValidator extends WebhookSignatureValidator {
 
 	public function __construct() {

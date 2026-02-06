@@ -6,6 +6,10 @@ use WC_Order;
 use WP_REST_Response;
 use Yoco\Repositories\OrdersRepository;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * WebhookProcessor
  */

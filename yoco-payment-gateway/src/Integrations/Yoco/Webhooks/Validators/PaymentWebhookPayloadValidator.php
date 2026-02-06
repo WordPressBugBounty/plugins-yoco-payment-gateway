@@ -4,6 +4,10 @@ namespace Yoco\Integrations\Yoco\Webhooks\Validators;
 
 use Yoco\Helpers\Validation\Validator;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class PaymentWebhookPayloadValidator extends Validator {
 
 	protected array $rules = array(

@@ -5,6 +5,10 @@ namespace Yoco\Integrations\Yoco\Webhooks\REST;
 use WP_REST_Request;
 use WP_REST_Response;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 interface RouteInterface {
 
 	public function register(): bool;

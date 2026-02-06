@@ -10,6 +10,10 @@ use Yoco\Integrations\Yoco\Requests\Checkout;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Request {
 
 	private ?WC_Order $order = null;

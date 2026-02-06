@@ -2,6 +2,10 @@
 
 namespace Yoco\Gateway;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Provider {
 
 	private $gateway;

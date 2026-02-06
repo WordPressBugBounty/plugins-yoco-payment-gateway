@@ -4,6 +4,10 @@ namespace Yoco\Gateway;
 
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Yoco payment method integration
  *
@@ -58,7 +62,7 @@ final class BlocksCheckout extends AbstractPaymentMethodType {
 		);
 		wp_set_script_translations(
 			'yoco-blocks-integration',
-			'yoco_wc_payment_gateway'
+			'yoco-payment-gateway'
 		);
 		return array( 'yoco-blocks-integration' );
 	}
@@ -78,6 +82,7 @@ final class BlocksCheckout extends AbstractPaymentMethodType {
 				'Visa'       => YOCO_ASSETS_URI . '/images/visa.svg',
 				'MasterCard' => YOCO_ASSETS_URI . '/images/master.svg',
 				'MasterPass' => YOCO_ASSETS_URI . '/images/masterpass.svg',
+				'Amex'       => YOCO_ASSETS_URI . '/images/american_express.svg',
 			),
 		);
 	}

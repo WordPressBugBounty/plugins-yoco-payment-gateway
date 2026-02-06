@@ -7,6 +7,10 @@ use WC_Abstract_Order;
 use WC_Order_Refund;
 use Yoco\Integrations\Yoco\Webhooks\Models\WebhookPayload;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Metadata {
 
 	public const CHECKOUT_ID_ORDER_META_KEY = 'yoco_order_checkout_id';

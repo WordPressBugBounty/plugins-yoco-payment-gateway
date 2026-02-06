@@ -6,6 +6,10 @@ use Yoco\Helpers\Versioner;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Dependencies {
 
 	public function __construct() {

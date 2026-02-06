@@ -2,6 +2,10 @@
 
 namespace Yoco\Helpers\Admin;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Notices {
 
 	private array $types = array(
@@ -29,7 +33,7 @@ class Notices {
 		add_action(
 			'admin_notices',
 			function () use ( $type, $message ) {
-				echo "<div class=\"notice {$type} is-dismissible\"><p>{$message}</p></div>";
+				echo '<div class="notice' . esc_attr( $type ) . 'is-dismissible"><p>' . esc_html( $message ) . '</p></div>';
 			}
 		);
 	}
@@ -46,8 +50,8 @@ class Notices {
 			return;
 		}
 
-		$message = str_replace("\n", '<br>', $message );
-		$prefix          = apply_filters( 'yoco_payment_gateway_admin_notice_prefix', __( 'Yoco Payments', 'yoco_wc_payment_gateway' ) );
+		$message         = str_replace( "\n", '<br>', $message );
+		$prefix          = apply_filters( 'yoco_payment_gateway_admin_notice_prefix', __( 'Yoco Payments', 'yoco-payment-gateway' ) );
 		$type            = $this->getNoticeType( $type );
 		$notices[ $key ] = true;
 

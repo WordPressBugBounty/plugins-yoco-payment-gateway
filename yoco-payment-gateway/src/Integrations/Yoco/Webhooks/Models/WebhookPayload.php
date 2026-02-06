@@ -2,6 +2,10 @@
 
 namespace Yoco\Integrations\Yoco\Webhooks\Models;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class WebhookPayload {
 
 	private ?string $checkoutId = null;

@@ -6,6 +6,10 @@ use Yoco\Core\Constants;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Credentials {
 
 	private ?Gateway $gateway = null;

@@ -2,6 +2,10 @@
 
 namespace Yoco\Gateway;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Mode {
 
 	private ?Gateway $gateway = null;

@@ -11,6 +11,10 @@ use Yoco\Installation\Installation;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Setup class.
  */
@@ -63,7 +67,7 @@ class Setup {
 			$this->deactivateAsIncompatibileEnv(
 				sprintf(
 					// translators: link open and link closing tag.
-					__( 'Error: plugin suspended due to missing Installation ID. Please visit %1$sYoco Payments settings%2$s and "Save changes". Make sure Secret Keys are correct.', 'yoco_wc_payment_gateway' ),
+					__( 'Error: plugin suspended due to missing Installation ID. Please visit %1$sYoco Payments settings%2$s and "Save changes". Make sure Secret Keys are correct.', 'yoco-payment-gateway' ),
 					'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=class_yoco_wc_payment_gateway' ) . '">',
 					'</a>',
 				)
@@ -89,7 +93,7 @@ class Setup {
 			$this->deactivateAsIncompatibileEnv(
 				sprintf(
 					// translators: link open and link closing tag.
-					__( 'Error: plugin suspended due to missing Subscription ID. Please visit %1$sYoco Payments settings%2$s and "Save changes". Make sure Secret Keys are correct.', 'yoco_wc_payment_gateway' ),
+					__( 'Error: plugin suspended due to missing Subscription ID. Please visit %1$sYoco Payments settings%2$s and "Save changes". Make sure Secret Keys are correct.', 'yoco-payment-gateway' ),
 					'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=class_yoco_wc_payment_gateway' ) . '">',
 					'</a>',
 				)
@@ -103,17 +107,17 @@ class Setup {
 		$telemetry = yoco( Telemetry::class )->getObject();
 
 		if ( version_compare( $telemetry->getPhpVersion(), '7.4.0', '<' ) ) {
-			$this->deactivateAsIncompatibileEnv( __( 'Error: plugin suspended due to incompatible PHP version. Required PHP version is 7.4.0 or higher.', 'yoco_wc_payment_gateway' ) );
+			$this->deactivateAsIncompatibileEnv( __( 'Error: plugin suspended due to incompatible PHP version. Required PHP version is 7.4.0 or higher.', 'yoco-payment-gateway' ) );
 			return false;
 		}
 
 		if ( version_compare( $telemetry->getWpVersion(), '5.0.0', '<' ) ) {
-			$this->deactivateAsIncompatibileEnv( __( 'Error: plugin suspended due to incompatible WordPress version. Required WordPress version 5.0 or higher.', 'yoco_wc_payment_gateway' ) );
+			$this->deactivateAsIncompatibileEnv( __( 'Error: plugin suspended due to incompatible WordPress version. Required WordPress version 5.0 or higher.', 'yoco-payment-gateway' ) );
 			return false;
 		}
 
 		if ( version_compare( $telemetry->getWcVersion(), '4.0.0', '<' ) ) {
-			$this->deactivateAsIncompatibileEnv( __( 'Error: plugin suspended due to incompatible WooCommerce version. Required WooCommerce version 4.0 or higher.', 'yoco_wc_payment_gateway' ) );
+			$this->deactivateAsIncompatibileEnv( __( 'Error: plugin suspended due to incompatible WooCommerce version. Required WooCommerce version 4.0 or higher.', 'yoco-payment-gateway' ) );
 			return false;
 		}
 

@@ -10,6 +10,10 @@ use Yoco\Helpers\Logger;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class OrdersRepository {
 
 	public static function getById( int $id ): ?WC_Abstract_Order {
@@ -98,7 +102,8 @@ class OrdersRepository {
 
 		if ( ! is_a( $order, WC_Order::class ) ) {
 			yoco( Logger::class )->logError( sprintf( 'Order ID (%s) is not instance of WC_Order.', $id ) );
-			throw new Exception( sprintf( __( 'Order ID (%s) is not instance of WC_Order.', 'yoco_wc_payment_gateway' ), $id ) );
+			// translators: Order ID.
+			throw new Exception( sprintf( esc_html__( 'Order ID (%s) is not instance of WC_Order.', 'yoco-payment-gateway' ), esc_html( $id ) ) );
 		}
 
 		return $order;

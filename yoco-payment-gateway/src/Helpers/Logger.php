@@ -7,6 +7,10 @@ use WC_Log_Levels;
 use Yoco\Installation\Installation;
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Logger {
 
 	private ?array $error_log_files = null;

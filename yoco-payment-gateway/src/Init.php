@@ -8,17 +8,14 @@ use Yoco\Core\Setup;
 use Yoco\Core\Singleton;
 use Yoco\Core\Dependencies;
 use Yoco\Core\Environment;
-use Yoco\Core\Language;
 use Yoco\Core\Plugin;
 use Yoco\Cron\CronScheduler;
-use Yoco\Gateway\Admin;
 use Yoco\Gateway\Admin\Notices;
 use Yoco\Gateway\Checkout\Availability;
 use Yoco\Gateway\Checkout\Method;
 use Yoco\Gateway\Notes;
 use Yoco\Gateway\Metadata;
 use Yoco\Gateway\PaymentStatusScheduler;
-use Yoco\Gateway\Order;
 use Yoco\Gateway\Provider;
 use Yoco\Gateway\Settings;
 use Yoco\Helpers\Admin\Notices as AdminNotices;
@@ -34,8 +31,11 @@ use Yoco\Integrations\Webhook\Guard;
 use Yoco\Integrations\Yoco\Webhooks\Events\WebhookEventsManager;
 use Yoco\Integrations\Yoco\Webhooks\REST\Rewrites;
 use Yoco\Integrations\Yoco\Webhooks\REST\Router;
-use Yoco\Telemetry\Jobs\TelemetryUpdateJob;
 use Yoco\Telemetry\Telemetry;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 final class Init extends Singleton {
 
@@ -95,7 +95,6 @@ final class Init extends Singleton {
 		$this->bindPrivate( Plugin::class );
 		$this->bindPublic( Setup::class );
 		$this->bindPrivate( Dependencies::class );
-		// $this->bindPrivate(Language::class);
 		$this->bindPrivate( Actions::class );
 
 		$this->bindPublic( PaymentStatusScheduler::class );
@@ -111,7 +110,8 @@ final class Init extends Singleton {
 
 	private function hasClass( string $className ): void {
 		if ( ! array_key_exists( $className, $this->public ) ) {
-			throw new \Exception( sprintf( __( 'Class %1$s hasn\'t been binded!', 'yoco_wc_payment_gateway' ), $className ) );
+			// translators: Class Name.
+			throw new \Exception( sprintf( esc_html__( 'Class %1$s not binded!', 'yoco-payment-gateway' ), esc_html( $className ) ) );
 		}
 	}
 

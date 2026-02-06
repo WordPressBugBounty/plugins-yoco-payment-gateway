@@ -12,6 +12,10 @@ use Yoco\Integrations\Yoco\Webhooks\REST\RouteInterface;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Webhook extends Route implements RouteInterface {
 
 	private string $path = 'webhook';

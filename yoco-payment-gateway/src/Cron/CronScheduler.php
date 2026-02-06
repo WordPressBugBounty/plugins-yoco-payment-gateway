@@ -6,6 +6,10 @@ use Yoco\Helpers\Logger;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CronScheduler {
 
 	public function scheduleEvent( string $action, array $args = array(), int $timestamp = 0 ): void {

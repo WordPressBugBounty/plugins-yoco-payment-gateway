@@ -2,6 +2,10 @@
 
 namespace Yoco\Integrations\Yoco\Webhooks\REST;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Rewrites {
 
 	public function __construct() {

@@ -10,6 +10,10 @@ use Yoco\Helpers\Logger;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class PaymentStatusScheduler {
 
 	private const SCHEDULE_INTERVAL = 60;  // seconds.
@@ -73,7 +77,7 @@ class PaymentStatusScheduler {
 				$order->add_order_note(
 					sprintf(
 						// translators: 1: attempt number, 2: status.
-						__( 'Yoco: Failed to process payment after %d attempts', 'yoco_wc_payment_gateway' ),
+						__( 'Yoco: Failed to process payment after %d attempts', 'yoco-payment-gateway' ),
 						$order_data['i']
 					)
 				);
@@ -111,7 +115,7 @@ class PaymentStatusScheduler {
 				$order->add_order_note(
 					sprintf(
 						// translators: 1: attempt number, 2: status.
-						__( 'Yoco: Payment status update attempt #%1$d -- obtained status: %2$s', 'yoco_wc_payment_gateway' ),
+						__( 'Yoco: Payment status update attempt #%1$d -- obtained status: %2$s', 'yoco-payment-gateway' ),
 						$order_data['i'],
 						$payment_status
 					)
@@ -163,7 +167,7 @@ class PaymentStatusScheduler {
 				// Add order note.
 				$order = wc_get_order( $order_id );
 				if ( $order instanceof WC_Order ) {
-					$order->add_order_note( __( 'Yoco: Payment capture failed.', 'yoco_wc_payment_gateway' ) );
+					$order->add_order_note( __( 'Yoco: Payment capture failed.', 'yoco-payment-gateway' ) );
 				}
 
 				return;
@@ -194,7 +198,7 @@ class PaymentStatusScheduler {
 			// Add order note.
 			$order = wc_get_order( $order_id );
 			if ( $order instanceof WC_Order ) {
-				$order->add_order_note( __( 'Yoco: Payment canceled by the customer.', 'yoco_wc_payment_gateway' ) );
+				$order->add_order_note( __( 'Yoco: Payment canceled by the customer.', 'yoco-payment-gateway' ) );
 			}
 
 			// Empty cart when user cancel payment, order is already created.

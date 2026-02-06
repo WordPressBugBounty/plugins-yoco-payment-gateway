@@ -2,6 +2,10 @@
 
 namespace Yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! function_exists( 'Yoco\\yoco_load' ) ) {
 	/**
 	 * @return array

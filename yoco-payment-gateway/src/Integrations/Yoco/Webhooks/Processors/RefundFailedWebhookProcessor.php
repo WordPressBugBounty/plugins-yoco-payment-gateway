@@ -9,6 +9,10 @@ use Yoco\Integrations\Yoco\Webhooks\Models\WebhookPayload;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * RefundFailedWebhookProcessor
  */
@@ -42,8 +46,8 @@ class RefundFailedWebhookProcessor extends WebhookProcessor {
 			$this->order,
 			$payload->hasFailureReason()
 			// translators: message.
-			? sprintf( __( 'Yoco: %s', 'yoco_wc_payment_gateway' ), $payload->getFailureReason() )
-			: __( 'Yoco: Failed to refund the order.', 'yoco_wc_payment_gateway' )
+			? sprintf( __( 'Yoco: %s', 'yoco-payment-gateway' ), $payload->getFailureReason() )
+			: __( 'Yoco: Failed to refund the order.', 'yoco-payment-gateway' )
 		);
 
 		return $this->sendSuccessResponse();

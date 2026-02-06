@@ -10,6 +10,10 @@ use Yoco\Helpers\MoneyFormatter as Money;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Request {
 
 	private ?WC_Order $order = null;

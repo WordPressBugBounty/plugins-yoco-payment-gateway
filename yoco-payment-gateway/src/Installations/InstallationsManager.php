@@ -6,6 +6,10 @@ use Yoco\Helpers\Logger;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class InstallationsManager {
 
 	public const INSTALLATION_ID_OPTION_LIVE_KEY = 'yoco_payment_gateway_installation_live_id';

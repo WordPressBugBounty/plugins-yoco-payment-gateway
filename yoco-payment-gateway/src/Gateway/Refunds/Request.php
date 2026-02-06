@@ -9,6 +9,10 @@ use Yoco\Installation\Installation;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Request {
 
 	private ?WC_Order $order = null;

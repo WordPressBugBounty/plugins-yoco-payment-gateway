@@ -2,6 +2,10 @@
 
 namespace Yoco\Helpers\Money;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Currencies {
 
 	public function getSupportedCurrencies(): array {

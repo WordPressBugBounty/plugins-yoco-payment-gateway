@@ -9,6 +9,10 @@ use Yoco\Helpers\Security\SSL;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Notices {
 
 	public function __construct() {
@@ -19,7 +23,7 @@ class Notices {
 
 	public function showTestModeNotice( Gateway $gateway ): void {
 		if ( $gateway->mode->isTestMode() ) {
-			yoco( AdminNotices::class )->renderNotice( 'info', __( 'Test mode enabled.', 'yoco_wc_payment_gateway' ) );
+			yoco( AdminNotices::class )->renderNotice( 'info', __( 'Test mode enabled.', 'yoco-payment-gateway' ) );
 		}
 	}
 
@@ -30,7 +34,8 @@ class Notices {
 		$currencies = yoco( Currencies::class );
 
 		if ( ! $currencies->isCurrentCurrencySupported() ) {
-			yoco( AdminNotices::class )->renderNotice( 'warning', sprintf( __( 'Currency is not supported (%s).', 'yoco_wc_payment_gateway' ), $currencies->getCurrentCurrency() ) );
+			// translators: Currency symbol.
+			yoco( AdminNotices::class )->renderNotice( 'warning', sprintf( esc_html__( 'Currency is not supported (%s).', 'yoco-payment-gateway' ), esc_html( $currencies->getCurrentCurrency() ) ) );
 		}
 	}
 
@@ -41,7 +46,7 @@ class Notices {
 		$ssl = yoco( SSL::class );
 
 		if ( ! $ssl->isSecure() ) {
-			yoco( AdminNotices::class )->renderNotice( 'warning', __( 'Payment method not available for unsafe websites (SSL).', 'yoco_wc_payment_gateway' ) );
+			yoco( AdminNotices::class )->renderNotice( 'warning', __( 'Payment method not available for unsafe websites (SSL).', 'yoco-payment-gateway' ) );
 		}
 	}
 }

@@ -10,6 +10,10 @@ use Yoco\Integrations\Yoco\Webhooks\Models\WebhookPayload;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * PaymentWebhookProcessor
  */

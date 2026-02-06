@@ -2,6 +2,10 @@
 
 namespace Yoco\Helpers\Storage;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Options {
 
 	private array $options = array();

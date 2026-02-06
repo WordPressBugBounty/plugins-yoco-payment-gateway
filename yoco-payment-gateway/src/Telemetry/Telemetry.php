@@ -4,6 +4,10 @@ namespace Yoco\Telemetry;
 
 use Yoco\Telemetry\Models\TelemetryObject;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Telemetry {
 
 	public function getObject(): TelemetryObject {

@@ -10,6 +10,10 @@ use Yoco\Helpers\MoneyFormatter as Money;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Actions {
 
 	public static function sync_refunds( $order ) {
@@ -110,7 +114,8 @@ class Actions {
 			$args = array(
 				'amount'         => $refund->amount / 100,
 				'reason'         => sprintf(
-					__( 'Refund requested via Yoco Portal. Refund ID (%s)', 'yoco_wc_payment_gateway' ),
+					// translators: Refund ID.
+					__( 'Refund requested via Yoco Portal. Refund ID (%s)', 'yoco-payment-gateway' ),
 					$refund->id
 				),
 				'order_id'       => $order->get_id(),

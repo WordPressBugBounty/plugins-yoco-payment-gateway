@@ -7,6 +7,10 @@ use Yoco\Telemetry\Telemetry;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Request {
 
 	private ?Installation $installation = null;

@@ -5,13 +5,15 @@
  * Description: Take debit and credit card payments on your store.
  * Author: Yoco
  * Author URI: https://www.yoco.com
- * Version: 3.8.6
- * Requires at least: 5.0.0
- * Tested up to: 6.8
+ * Version: 3.9.1
+ * Requires at least: 6.4.0
+ * Tested up to: 6.9
  * WC requires at least: 8.0.0
- * WC tested up to: 10.1
+ * WC tested up to: 10.4
  * Requires Plugins: woocommerce
- * Text Domain: yoco_wc_payment_gateway
+ * Text Domain: yoco-payment-gateway
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package Yoco Payments
  */
@@ -93,7 +95,7 @@ add_action(
 		echo '<strong>';
 		printf(
 			/* translators: %s WooCommerce download URL link. */
-			esc_html__( 'Yoco Payment Gateway requires WooCommerce to be installed and active. You can read how to install %s here.', 'yoco_wc_payment_gateway' ),
+			esc_html__( 'Yoco Payment Gateway requires WooCommerce to be installed and active. You can read how to install %s here.', 'yoco-payment-gateway' ),
 			'<a href="https://woo.com/document/installing-uninstalling-woocommerce/" target="_blank">WooCommerce</a>'
 		);
 		echo '</strong></p></div>';

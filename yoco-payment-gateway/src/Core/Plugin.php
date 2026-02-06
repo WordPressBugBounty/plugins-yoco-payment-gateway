@@ -2,6 +2,10 @@
 
 namespace Yoco\Core;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Plugin {
 
 	public function __construct() {

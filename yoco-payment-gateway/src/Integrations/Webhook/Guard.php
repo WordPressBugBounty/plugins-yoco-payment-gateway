@@ -4,6 +4,10 @@ namespace Yoco\Integrations\Webhook;
 
 use WP_REST_Request;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Guard {
 
 	public function verifySignature( WP_REST_Request $request ): bool {

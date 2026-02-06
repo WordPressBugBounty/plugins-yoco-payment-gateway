@@ -6,6 +6,10 @@ use Exception;
 use Yoco\Helpers\Logger;
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * @see https://github.com/svix/svix-webhooks/blob/main/php/src/Webhook.php
  */

@@ -11,18 +11,21 @@ use Yoco\Helpers\Logger;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class RefundProcessor {
 
 	/**
 	 * Process refund.
 	 *
-	 * @param  WC_Order   $order
-	 * @param  float|null $amount
-	 * @param  string     $reason
+	 * @param  WC_Order   $order Woo Order.
+	 * @param  float|null $amount Amount.
 	 *
 	 * @return bool|WP_Error
 	 */
-	public function process( WC_Order $order, float $amount ) {
+	public static function process( WC_Order $order, float $amount ) {
 
 		try {
 			Refunds_Actions::sync_refunds( $order );

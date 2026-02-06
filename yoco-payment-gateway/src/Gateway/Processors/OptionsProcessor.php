@@ -11,6 +11,10 @@ use Yoco\Installation\Request;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class OptionsProcessor {
 
 	private ?Gateway $gateway = null;
@@ -52,12 +56,14 @@ class OptionsProcessor {
 				$error_string  = "\n" . $response['code'] . ': ' . $response['message'] . ( $error_message ? "\n" . $error_message : '' ) . ( $error_code ? "\n" . $error_code : '' );
 				yoco( Logger::class )->logError(
 					sprintf(
-						__( 'Failed to request installation. %s', 'yoco_wc_payment_gateway' ),
+						// translators: Error message.
+						__( 'Failed to request installation. %s', 'yoco-payment-gateway' ),
 						$error_string
 					)
 				);
 
-				throw new Exception( sprintf( __( 'Failed to request installation. %s', 'yoco_wc_payment_gateway' ), $error_string ) );
+				// translators: Error message.
+				throw new Exception( sprintf( __( 'Failed to request installation. %s', 'yoco-payment-gateway' ), $error_string ) );
 			}
 
 			$this->saveInstallationData( $response['body'] );
@@ -71,7 +77,7 @@ class OptionsProcessor {
 	private function saveInstallationData( array $response ) {
 		if ( ! isset( $response['id'] ) || empty( $response['id'] ) ) {
 			yoco( Logger::class )->logError( 'Response missing installation ID.' );
-			throw new Exception( __( 'Response missing installation ID.', 'yoco_wc_payment_gateway' ) );
+			throw new Exception( esc_html__( 'Response missing installation ID.', 'yoco-payment-gateway' ) );
 		}
 
 		$this->installation->saveId( $response['id'] );
@@ -82,7 +88,7 @@ class OptionsProcessor {
 			|| empty( $response['subscription']->secret )
 		) {
 			yoco( Logger::class )->logError( 'Response missing subscription secret.' );
-			throw new Exception( __( 'Response missing subscription secret.', 'yoco_wc_payment_gateway' ) );
+			throw new Exception( esc_html__( 'Response missing subscription secret.', 'yoco-payment-gateway' ) );
 		}
 
 		$this->installation->saveWebhookSecret( $response['subscription']->secret );
@@ -91,24 +97,25 @@ class OptionsProcessor {
 	}
 
 	private function displaySuccessNotice(): void {
-		yoco( Notices::class )->renderNotice( 'info', __( 'Plugin installed successfully.', 'yoco_wc_payment_gateway' ) );
+		yoco( Notices::class )->renderNotice( 'info', __( 'Plugin installed successfully.', 'yoco-payment-gateway' ) );
 	}
 
 	private function displayFailureNotice( \Throwable $th ): void {
-		yoco( Notices::class )->renderNotice( 'warning', sprintf( __( 'Failed to install plugin. %s', 'yoco_wc_payment_gateway' ), $th->getMessage() ) );
+		// translators: Error message.
+		yoco( Notices::class )->renderNotice( 'warning', sprintf( __( 'Failed to install plugin. %s', 'yoco-payment-gateway' ), $th->getMessage() ) );
 	}
 
 	private function validateKeys(): void {
 		if ( 'test' === $this->gateway->mode->getMode() && empty( preg_match( '/^sk_test/', $this->gateway->credentials->getTestSecretKey() ) ) ) {
-			yoco( Notices::class )->renderNotice( 'warning', __( 'Please check the formatting of the secret key.', 'yoco_wc_payment_gateway' ) );
+			yoco( Notices::class )->renderNotice( 'warning', esc_html__( 'Please check the formatting of the secret key.', 'yoco-payment-gateway' ) );
 			yoco( Logger::class )->logError( 'Test secret key seem to be invalid.' );
-			throw new Exception( __( 'Test secret key seem to be invalid.', 'yoco_wc_payment_gateway' ) );
+			throw new Exception( esc_html__( 'Test secret key seem to be invalid.', 'yoco-payment-gateway' ) );
 		}
 
 		if ( 'live' === $this->gateway->mode->getMode() && empty( preg_match( '/^sk_live/', $this->gateway->credentials->getLiveSecretKey() ) ) ) {
-			yoco( Notices::class )->renderNotice( 'warning', __( 'Please check the formatting of the secret key.', 'yoco_wc_payment_gateway' ) );
+			yoco( Notices::class )->renderNotice( 'warning', esc_html__( 'Please check the formatting of the secret key.', 'yoco-payment-gateway' ) );
 			yoco( Logger::class )->logError( 'Live secret key seem to be invalid.' );
-			throw new Exception( __( 'Live secret key seem to be invalid.', 'yoco_wc_payment_gateway' ) );
+			throw new Exception( esc_html__( 'Live secret key seem to be invalid.', 'yoco-payment-gateway' ) );
 		}
 	}
 

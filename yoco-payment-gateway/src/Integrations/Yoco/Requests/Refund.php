@@ -46,7 +46,8 @@ class Refund {
 		$args = array(
 			'amount'         => $payload->getAmount() / 100,
 			'reason'         => sprintf(
-				__( 'Refund requested via Yoco Portal. Refund ID (%s)', 'yoco_wc_payment_gateway' ),
+				// translators: Refound ID.
+				__( 'Refund requested via Yoco Portal. Refund ID (%s)', 'yoco-payment-gateway' ),
 				$payload->getId()
 			),
 			'order_id'       => $order->get_id(),
@@ -57,7 +58,7 @@ class Refund {
 
 		if ( is_wp_error( $refund ) ) {
 			yoco( Logger::class )->logError( 'Refund creation failed: ' . $refund->get_error_message() . ' code: ' . $refund->get_error_code() );
-			throw new Error( $refund->get_error_message(), (int) $refund->get_error_code() );
+			throw new Error( esc_html( $refund->get_error_message() ), (int) $refund->get_error_code() );
 		}
 
 		do_action( 'yoco_payment_gateway/order/refunded', $refund, $data );

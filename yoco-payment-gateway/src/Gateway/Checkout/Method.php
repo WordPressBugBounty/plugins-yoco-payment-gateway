@@ -4,6 +4,10 @@ namespace Yoco\Gateway\Checkout;
 
 use WC_Order;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Method {
 
 	public function __construct() {
@@ -18,7 +22,7 @@ class Method {
 			return;
 		}
 
-		$title = __( 'Yoco', 'yoco_wc_payment_gateway' );
+		$title = __( 'Yoco', 'yoco-payment-gateway' );
 
 		if ( $title !== $order->get_payment_method_title() ) {
 			$order->set_payment_method_title( $title );
@@ -32,7 +36,7 @@ class Method {
 			return;
 		}
 
-		$title = __( 'Yoco', 'yoco_wc_payment_gateway' );
+		$title = __( 'Yoco', 'yoco-payment-gateway' );
 
 		if ( $title !== $order->get_payment_method_title() ) {
 			$order->set_payment_method_title( $title );

@@ -9,6 +9,10 @@ use Yoco\Repositories\OrdersRepository;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Notes {
 
 	public function __construct() {
@@ -33,7 +37,7 @@ class Notes {
 		}
 
 		// translators: Checkout Session ID.
-		$this->addNote( $order, sprintf( esc_html__( 'Yoco: Received checkout session ID (%s).', 'yoco_wc_payment_gateway' ), esc_html( $session_id ) ) );
+		$this->addNote( $order, sprintf( esc_html__( 'Yoco: Received checkout session ID (%s).', 'yoco-payment-gateway' ), esc_html( $session_id ) ) );
 	}
 
 	public function addPaymentIdNoteToOrder( int $order_id ): void {
@@ -52,7 +56,7 @@ class Notes {
 		}
 
 		// translators: Payment ID.
-		$this->addNote( $order, sprintf( esc_html__( 'Yoco: Received payment session ID (%s).', 'yoco_wc_payment_gateway' ), esc_html( $payment_id ) ) );
+		$this->addNote( $order, sprintf( esc_html__( 'Yoco: Received payment session ID (%s).', 'yoco-payment-gateway' ), esc_html( $payment_id ) ) );
 	}
 
 	public function addRefundIdNoteToOrder( int $order_id ): void {
@@ -78,7 +82,7 @@ class Notes {
 		}
 
 		// translators: Refund ID.
-		$this->addNote( $order, sprintf( esc_html__( 'Yoco: Received refund session ID (%s).', 'yoco_wc_payment_gateway' ), esc_html( $refund_id ) ) );
+		$this->addNote( $order, sprintf( esc_html__( 'Yoco: Received refund session ID (%s).', 'yoco-payment-gateway' ), esc_html( $refund_id ) ) );
 	}
 
 	public function addNote( WC_Abstract_Order $order, string $note ): int {

@@ -1,10 +1,10 @@
 === Yoco Payments ===
 Contributors: Yoco
 Tags: woocommerce,payment gateway
-Requires at least: 5.0.0
-Tested up to: 6.8
+Requires at least: 6.4.0
+Tested up to: 6.9
 Requires PHP: 7.4.0
-Stable tag: 3.8.6
+Stable tag: 3.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,30 @@ Set the plugin to Test mode, fetch your Test Keys from the [Yoco Business Porta
 More detailed installation notes can be found in [Yoco Gateway for WooCommerce: User Guide.](https://support.yoco.help/s/article/Yoco-for-WooCommerce) or you can [get in touch with us](https://www.yoco.com/za/contact/).
 
 == Changelog ==
+
+= 3.9.1 =
+Bug Fixes
+* Added validation to ensure files meet specific format and naming requirements.
+* Enhanced input sanitization for file parameter handling.
+* Implemented path normalization with comprehensive directory boundary verification.
+* Improved file accessibility and readability checks before processing.
+
+= 3.9.0 =
+* Add First and Last Name validation in checkout for both Legacy and Blocks to ensure compatibility with Yoco payment gateway.
+* Fix Vulnerability for unauthenticated arbitrary file read.
+Change plugin Text Domain from yoco_wc_payment_gateway to yoco-payment-gateway.
+
+= 3.8.9 =
+
+* Tweak - WordPress 6.9 and WooCommerce 10.4 Compatibility.
+
+= 3.8.8 =
+
+* Fix Payment error when using legacy theme with block checkout.
+
+= 3.8.7 =
+
+* Add AMEX Payment Method logo.
 
 = 3.8.6 =
 

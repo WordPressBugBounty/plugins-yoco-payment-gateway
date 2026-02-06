@@ -2,6 +2,10 @@
 
 namespace Yoco\Helpers\Validation;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class ValidatorErrorBag {
 
 	private array $errors = array();

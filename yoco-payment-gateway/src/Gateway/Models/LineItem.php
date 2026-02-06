@@ -2,6 +2,10 @@
 
 namespace Yoco\Gateway\Models;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class LineItem {
 
 	private string $displayName = '';

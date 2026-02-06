@@ -9,6 +9,10 @@ use Yoco\Integrations\Yoco\Webhooks\Validators\RefundWebhookPayloadValidator;
 
 use function Yoco\yoco;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class RefundWebhookPayloadParser implements WebhookPayloadParser {
 
 	protected ?WebhookPayload $payload = null;
@@ -44,12 +48,13 @@ class RefundWebhookPayloadParser implements WebhookPayloadParser {
 		$validator->validate( $data );
 
 		if ( $validator->getErrorBag()->hasErrors() ) {
-			$errorsString = join( ', ', $validator->getErrorBag()->getErrors() );
-			$errorMessage = sprintf( __( 'Webhook request body is invalid. Violated fields: %s.', 'yoco_wc_payment_gateway' ), $errorsString );
+			$errors_string = join( ', ', $validator->getErrorBag()->getErrors() );
+			// translators: Error message.
+			$error_message = sprintf( esc_html__( 'Webhook request body is invalid. Violated fields: %s.', 'yoco-payment-gateway' ), esc_html( $errors_string ) );
 
-			yoco( Logger::class )->logError( $errorMessage );
+			yoco( Logger::class )->logError( $error_message );
 
-			throw new Error( $errorMessage );
+			throw new Error( esc_html( $error_message ) );
 		}
 	}
 }

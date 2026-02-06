@@ -36,9 +36,9 @@ class Checkout {
 		$note = join(
 			' ',
 			array(
-				__( 'order', 'yoco_wc_payment_gateway' ),
+				__( 'order', 'yoco-payment-gateway' ),
 				$order->get_id(),
-				__( 'from', 'yoco_wc_payment_gateway' ),
+				__( 'from', 'yoco-payment-gateway' ),
 				$order->get_billing_first_name(),
 				$order->get_billing_last_name(),
 				'(' . $order->get_billing_email() . ')',

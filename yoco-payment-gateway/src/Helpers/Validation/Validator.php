@@ -4,6 +4,10 @@ namespace Yoco\Helpers\Validation;
 
 use Yoco\Helpers\Validation\ValidatorErrorBag;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 abstract class Validator implements ValidatorInterface {
 
 	protected array $rules = array();
