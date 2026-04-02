@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+# Group-specific configuration inherited from https://gitlab.com/yoco/online-payments/coderabbit/-/blob/main/.coderabbit.yaml
+inheritance: true
+
+# Placeholder for project-specific configuration

@@ -5,11 +5,11 @@
  * Description: Take debit and credit card payments on your store.
  * Author: Yoco
  * Author URI: https://www.yoco.com
- * Version: 3.9.1
+ * Version: 3.9.2
  * Requires at least: 6.4.0
  * Tested up to: 6.9
  * WC requires at least: 8.0.0
- * WC tested up to: 10.4
+ * WC tested up to: 10.6
  * Requires Plugins: woocommerce
  * Text Domain: yoco-payment-gateway
  * License:           GPLv2 or later
@@ -38,17 +38,19 @@ if ( ! defined( 'YOCO_INSTALL_API_URL' ) ) {
 	define( 'YOCO_INSTALL_API_URL', 'https://plugin.yoco.com/installation/woocommerce/createOrUpdate' );
 }
 
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use function Yoco\yoco_load;
 use function Yoco\yoco;
 
-require dirname( __FILE__ ) . '/inc/autoload.php';
+require __DIR__ . '/inc/autoload.php';
 
 add_action(
 	'before_woocommerce_init',
 	function () {
-		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
-			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', YOCO_PLUGIN_BASENAME, true );
-			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', YOCO_PLUGIN_BASENAME, true );
+		if ( class_exists( FeaturesUtil::class ) ) {
+			FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+			FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
+			FeaturesUtil::declare_compatibility( 'product_instance_caching', __FILE__, true );
 		}
 	}
 );

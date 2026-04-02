@@ -5,6 +5,7 @@ namespace Yoco\Gateway;
 use WC_Order;
 use WC_Payment_Gateway;
 use WP_Error;
+use Automattic\WooCommerce\StoreApi\Exceptions\RouteException;
 use Yoco\Gateway\Processors\OptionsProcessor;
 use Yoco\Gateway\Processors\PaymentProcessor;
 use Yoco\Gateway\Processors\RefundProcessor;
@@ -82,7 +83,7 @@ class Gateway extends WC_Payment_Gateway {
 		$pattern    = "/^[A-Za-zÀ-ÖØ-öø-ÿ\s\'-]+$/u";
 
 		if ( ! preg_match( $pattern, $first_name ) ) {
-			throw new \WC_REST_Exception(
+			throw new RouteException(
 				'billing_first_name_invalid',
 				esc_html( $this->get_invalid_chars_message( $first_name, $pattern, 'First name' ) ),
 				400
@@ -90,7 +91,7 @@ class Gateway extends WC_Payment_Gateway {
 		}
 
 		if ( ! preg_match( $pattern, $last_name ) ) {
-			throw new \WC_REST_Exception(
+			throw new RouteException(
 				'billing_last_name_invalid',
 				esc_html( $this->get_invalid_chars_message( $last_name, $pattern, 'Last name' ) ),
 				400
@@ -118,7 +119,7 @@ class Gateway extends WC_Payment_Gateway {
 
 		if ( ! preg_match( $pattern, $last_name ) ) {
 			$errors->add(
-				'billing_last_name_required',
+				'billing_last_name_invalid',
 				$this->get_invalid_chars_message( $last_name, $pattern, __( 'Last name', 'yoco-payment-gateway' ) )
 			);
 		}

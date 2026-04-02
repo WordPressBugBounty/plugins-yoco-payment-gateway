@@ -4,7 +4,7 @@ Tags: woocommerce,payment gateway
 Requires at least: 6.4.0
 Tested up to: 6.9
 Requires PHP: 7.4.0
-Stable tag: 3.9.1
+Stable tag: 3.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,12 @@ Set the plugin to Test mode, fetch your Test Keys from the [Yoco Business Porta
 More detailed installation notes can be found in [Yoco Gateway for WooCommerce: User Guide.](https://support.yoco.help/s/article/Yoco-for-WooCommerce) or you can [get in touch with us](https://www.yoco.com/za/contact/).
 
 == Changelog ==
+
+= 3.9.2 =
+* Add   - Declare product instance caching compatibility.
+* Fix   - Fix validation errors returning HTTP 500 instead of 400 on WooCommerce Checkout Block by using the correct exception type (RouteException).
+* Fix   - Fix inconsistent error code for last name validation in legacy checkout.
+* Tweak - WooCommerce 10.6 Compatibility.
 
 = 3.9.1 =
 Bug Fixes
