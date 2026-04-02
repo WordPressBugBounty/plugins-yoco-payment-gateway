@@ -31,11 +31,20 @@ class Client {
 		$message = wp_remote_retrieve_response_message( $response );
 		$body    = wp_remote_retrieve_body( $response );
 
-		return array(
+		$data = array(
 			'code'    => $code,
 			'message' => $message,
 			'body'    => (array) json_decode( $body ),
 		);
+
+		if ( apply_filters( 'yoco_payment_gateway_debug', false ) ) {
+			$data['args'] = $args;
+			if ( isset( $data['args']['headers']['Authorization'] ) ) {
+				$data['args']['headers']['Authorization'] = 'xxxxx';
+			}
+		}
+
+		return $data;
 	}
 
 	public function get( string $url, array $args ) {
@@ -64,4 +73,3 @@ class Client {
 		);
 	}
 }
-

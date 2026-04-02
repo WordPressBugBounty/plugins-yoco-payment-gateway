@@ -47,14 +47,19 @@ class PaymentProcessor {
 			$response = $request->send();
 
 			if ( ! in_array( (int) $response['code'], array( 200, 201, 202 ), true ) ) {
+				$code             = $response['code'];
 				$error_message    = isset( $response['body']['errorMessage'] ) ? $response['body']['errorMessage'] : '';
 				$error_code       = isset( $response['body']['errorCode'] ) ? $response['body']['errorCode'] : '';
 				$response_message = isset( $response['message'] ) ? $response['message'] : '';
+				$description      = isset( $response['body']['description'] ) ? $response['body']['description'] : '';
 				yoco( Logger::class )->logError(
 					sprintf(
-						'Failed to request checkout. %s',
-						$response_message
-					) . ( $error_message ? "\n" . $error_message : '' ) . ( $error_code ? "\n" . $error_code : '' )
+						'Failed to request checkout. code=%s message="%s" description="%s"',
+						$code,
+						$response_message,
+						$description
+					) . ( $error_message ? "\n" . 'error_message: ' . $error_message : '' ) . ( $error_code ? "\n" . 'error_code: ' . $error_code : '' )
+					. ( apply_filters( 'yoco_payment_gateway_debug', false ) ? "\n" . print_r( $response['body'], true ) . "\n" . print_r( $response['args'], true ) : '' ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 				);
 
 				throw new Exception( sprintf( 'Failed to request checkout. %s', $response_message ) );
