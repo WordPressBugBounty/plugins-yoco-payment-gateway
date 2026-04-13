@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/yoco-payment-gateway\n"
-"POT-Creation-Date: 2026-03-16 12:37:06+00:00\n"
+"POT-Creation-Date: 2026-04-13 10:45:24+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -74,46 +74,50 @@ msgid "Payment method not available for unsafe websites (SSL)."
 msgstr ""
 
 #: src/Gateway/Checkout/Method.php:25 src/Gateway/Checkout/Method.php:39
-#: src/Gateway/Gateway.php:48 src/Gateway/Settings.php:37
+#: src/Gateway/Gateway.php:50 src/Gateway/Settings.php:37
 msgid "Yoco"
 msgstr ""
 
-#: src/Gateway/Gateway.php:49 src/Gateway/Settings.php:44
+#: src/Gateway/Gateway.php:51 src/Gateway/Settings.php:44
 msgid "Pay securely using a credit/debit card or other payment methods via Yoco."
 msgstr ""
 
-#: src/Gateway/Gateway.php:51 src/Helpers/Admin/Notices.php:54
+#: src/Gateway/Gateway.php:53 src/Helpers/Admin/Notices.php:54
 msgid "Yoco Payments"
 msgstr ""
 
-#: src/Gateway/Gateway.php:52
+#: src/Gateway/Gateway.php:54
 msgid "Yoco Payments."
 msgstr ""
 
-#: src/Gateway/Gateway.php:115
+#: src/Gateway/Gateway.php:149
+#. translators: %s: comma-separated list of invalid characters.
+msgid ""
+"\"First name\" and \"Last name\" fields may only contain letters, spaces, "
+"hyphens, and apostrophes. Please remove: \"%s\""
+msgstr ""
+
+#: src/Gateway/Gateway.php:156 src/Gateway/Gateway.php:190
 msgid "First name"
 msgstr ""
 
-#: src/Gateway/Gateway.php:122
+#: src/Gateway/Gateway.php:157 src/Gateway/Gateway.php:197
 msgid "Last name"
 msgstr ""
 
-#: src/Gateway/Gateway.php:160
-#. translators: 1. field name, 2. invalid characters list
+#: src/Gateway/Gateway.php:162 src/Gateway/Gateway.php:220
+#. translators: 1: field label (e.g. "First name"), 2: comma-separated list of
+#. invalid characters.
 msgid ""
-"%1$s field contains invalid character: \"%2$s\". Please remove it to "
-"continue."
-msgid_plural ""
-"%1$s field contains invalid characters: \"%2$s\". Please remove them to "
-"continue."
-msgstr[0] ""
-msgstr[1] ""
+"\"%1$s\" field may only contain letters, spaces, hyphens, and apostrophes. "
+"Please remove: \"%2$s\""
+msgstr ""
 
-#: src/Gateway/Gateway.php:226
+#: src/Gateway/Gateway.php:304
 msgid "Can't perform payment. Invalid order."
 msgstr ""
 
-#: src/Gateway/Gateway.php:283
+#: src/Gateway/Gateway.php:361
 #. translators: Gateway mode production|test.
 msgid ""
 "Your gateway is not installed. You must apply and save the plugin %s "
@@ -195,8 +199,8 @@ msgstr ""
 msgid "A minimum order of R2.00 is required to proceed. Your order total is %s."
 msgstr ""
 
-#: src/Gateway/Processors/PaymentProcessor.php:69
-#: src/Gateway/Processors/PaymentProcessor.php:73
+#: src/Gateway/Processors/PaymentProcessor.php:74
+#: src/Gateway/Processors/PaymentProcessor.php:78
 msgid "Your order could not be processed by Yoco - please try again later."
 msgstr ""
 
@@ -341,7 +345,7 @@ msgstr ""
 msgid "Order ID (%s) is not instance of WC_Order."
 msgstr ""
 
-#: yoco_wc_payment_gateway.php:98
+#: yoco_wc_payment_gateway.php:100
 #. translators: %s WooCommerce download URL link.
 msgid ""
 "Yoco Payment Gateway requires WooCommerce to be installed and active. You "

@@ -2,10 +2,11 @@
 
 namespace Yoco\Gateway;
 
+use Automattic\WooCommerce\StoreApi\Payments\PaymentContext;
+use Exception;
 use WC_Order;
 use WC_Payment_Gateway;
 use WP_Error;
-use Automattic\WooCommerce\StoreApi\Exceptions\RouteException;
 use Yoco\Gateway\Processors\OptionsProcessor;
 use Yoco\Gateway\Processors\PaymentProcessor;
 use Yoco\Gateway\Processors\RefundProcessor;
@@ -64,41 +65,114 @@ class Gateway extends WC_Payment_Gateway {
 		add_action( "woocommerce_update_options_payment_gateways_{$this->id}", array( $this, 'update_admin_options' ) );
 		add_filter( "woocommerce_settings_api_sanitized_fields_{$this->id}", array( $this, 'unset_fields' ) );
 
-		add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( $this, 'validate_checkout_fields_blocks' ), 10, 2 );
+		add_action( 'woocommerce_rest_checkout_process_payment_with_context', array( $this, 'validate_billing_name_chars' ), 5, 1 );
 
 		add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_checkout_fields_legacy' ), 10, 2 );
 	}
 
-	public function validate_checkout_fields_blocks( $order, $request ) {
+	/**
+	 * Server-side billing first/last name validation for the Blocks checkout.
+	 *
+	 * Hooked on `woocommerce_rest_checkout_process_payment_with_context`, which fires
+	 * ONLY inside CheckoutTrait::process_payment() during a POST /wc/store/v1/checkout
+	 * (place-order). Throwing an \Exception aborts payment and
+	 * CheckoutTrait::process_payment() wraps it into a RouteException with HTTP 400,
+	 * esc_html()-ing the message.
+	 *
+	 * This is intentionally NOT hooked on `woocommerce_store_api_cart_errors` or the
+	 * checkout update-order hook: those fire on every cart/checkout response build,
+	 * which produces duplicate notices in the UI alongside the per-field errors that
+	 * the frontend (public.js) creates on name/gate change. Keeping validation here
+	 * means the server only complains at place-order time, which is the last line of
+	 * defence in case the JS validation was bypassed.
+	 *
+	 * @param  PaymentContext $context PaymentContext.
+	 * @throws Exception When billing names contain disallowed characters.
+	 *
+	 * @return void
+	 */
+	public function validate_billing_name_chars( $context ): void {
+		if ( 'class_yoco_wc_payment_gateway' !== $context->payment_method ) {
+			return;
+		}
+
+		$order = $context->order;
 		if ( ! $order instanceof WC_Order ) {
 			return;
 		}
 
-		if ( 'class_yoco_wc_payment_gateway' !== $order->get_payment_method() ) {
+		$first_name = (string) $order->get_billing_first_name();
+		$last_name  = (string) $order->get_billing_last_name();
+		$pattern    = "/^[A-Za-zÀ-ÖØ-öø-ÿ\s\'-]+$/u";
+
+		$first_invalid = '' !== $first_name ? $this->get_invalid_chars( $first_name, $pattern ) : array();
+		$last_invalid  = '' !== $last_name ? $this->get_invalid_chars( $last_name, $pattern ) : array();
+
+		if ( empty( $first_invalid ) && empty( $last_invalid ) ) {
 			return;
 		}
 
-		$first_name = $request['billing_address']['first_name'] ?? '';
-		$last_name  = $request['billing_address']['last_name'] ?? '';
-		$pattern    = "/^[A-Za-zÀ-ÖØ-öø-ÿ\s\'-]+$/u";
+		$message = $this->build_invalid_name_chars_message( $first_invalid, $last_invalid );
 
-		if ( ! preg_match( $pattern, $first_name ) ) {
-			throw new RouteException(
-				'billing_first_name_invalid',
-				esc_html( $this->get_invalid_chars_message( $first_name, $pattern, 'First name' ) ),
-				400
-			);
-		}
-
-		if ( ! preg_match( $pattern, $last_name ) ) {
-			throw new RouteException(
-				'billing_last_name_invalid',
-				esc_html( $this->get_invalid_chars_message( $last_name, $pattern, 'Last name' ) ),
-				400
-			);
+		if ( '' !== $message ) {
+			throw new Exception( esc_html( $message ) );
 		}
 	}
 
+	/**
+	 * Build a single user-facing error message that covers any combination of
+	 * first/last name having invalid characters.
+	 *
+	 * Cases:
+	 *   - first only:  "First name" field may only contain …
+	 *   - last only:   "Last name" field may only contain …
+	 *   - both:        "First name" and "Last name" fields may only contain …
+	 *
+	 * @param string[] $first_invalid Unique invalid chars from the first-name field.
+	 * @param string[] $last_invalid  Unique invalid chars from the last-name field.
+	 * @return string Composed message, or empty string if no invalid chars were given.
+	 */
+	private function build_invalid_name_chars_message( array $first_invalid, array $last_invalid ): string {
+		$first_has = ! empty( $first_invalid );
+		$last_has  = ! empty( $last_invalid );
+
+		if ( ! $first_has && ! $last_has ) {
+			return '';
+		}
+
+		if ( $first_has && $last_has ) {
+			$invalid_chars = array_values( array_unique( array_merge( $first_invalid, $last_invalid ) ) );
+			$chars_str     = implode( ', ', $invalid_chars );
+
+			return sprintf(
+				/* translators: %s: comma-separated list of invalid characters. */
+				__( '"First name" and "Last name" fields may only contain letters, spaces, hyphens, and apostrophes. Please remove: "%s"', 'yoco-payment-gateway' ),
+				$chars_str
+			);
+		}
+
+		$invalid_chars = $first_has ? $first_invalid : $last_invalid;
+		$field_label   = $first_has
+			? __( 'First name', 'yoco-payment-gateway' )
+			: __( 'Last name', 'yoco-payment-gateway' );
+		$chars_str     = implode( ', ', $invalid_chars );
+
+		return sprintf(
+			/* translators: 1: field label (e.g. "First name"), 2: comma-separated list of invalid characters. */
+			__( '"%1$s" field may only contain letters, spaces, hyphens, and apostrophes. Please remove: "%2$s"', 'yoco-payment-gateway' ),
+			$field_label,
+			$chars_str
+		);
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @param array    $data   Checkout data.
+	 * @param WP_Error $errors WP Error object.
+	 *
+	 * @return void
+	 */
 	public function validate_checkout_fields_legacy( $data, $errors ) {
 
 		$payment_method = $data['payment_method'] ?? '';
@@ -110,14 +184,14 @@ class Gateway extends WC_Payment_Gateway {
 			return;
 		}
 
-		if ( ! preg_match( $pattern, $first_name ) ) {
+		if ( '' !== $first_name && ! preg_match( $pattern, $first_name ) ) {
 			$errors->add(
 				'billing_first_name_invalid',
 				$this->get_invalid_chars_message( $first_name, $pattern, __( 'First name', 'yoco-payment-gateway' ) )
 			);
 		}
 
-		if ( ! preg_match( $pattern, $last_name ) ) {
+		if ( '' !== $last_name && ! preg_match( $pattern, $last_name ) ) {
 			$errors->add(
 				'billing_last_name_invalid',
 				$this->get_invalid_chars_message( $last_name, $pattern, __( 'Last name', 'yoco-payment-gateway' ) )
@@ -134,43 +208,46 @@ class Gateway extends WC_Payment_Gateway {
 	 * @return string|null    Message if invalid characters found, null if valid.
 	 */
 	private function get_invalid_chars_message( string $value, string $pattern, string $field ): ?string {
-		// Remove delimiters and optional anchors.
-		$char_pattern = trim( $pattern, '/' );      // removes leading/trailing /.
-		$char_pattern = preg_replace( '/^\^/', '', $char_pattern ); // remove starting ^.
-		$char_pattern = preg_replace( '/\$$/', '', $char_pattern ); // remove ending $.
+		$invalid_chars = $this->get_invalid_chars( $value, $pattern );
 
-		// Remove quantifiers for single-character match.
-		$char_pattern = str_replace( '+', '', $char_pattern );
-		// Build full regex for allowed characters.
+		if ( empty( $invalid_chars ) ) {
+			return null;
+		}
+
+		$chars_str = implode( ', ', $invalid_chars );
+		return sprintf(
+			/* translators: 1: field label (e.g. "First name"), 2: comma-separated list of invalid characters. */
+			__( '"%1$s" field may only contain letters, spaces, hyphens, and apostrophes. Please remove: "%2$s"', 'yoco-payment-gateway' ),
+			$field,
+			$chars_str
+		);
+	}
+
+	/**
+	 * Extract the unique invalid characters from a value, given a full regex
+	 * pattern that describes the allowed character set.
+	 *
+	 * @param string $value   The string to inspect.
+	 * @param string $pattern Full regex pattern with delimiters and anchors.
+	 * @return string[] Unique invalid characters in order of first occurrence.
+	 */
+	private function get_invalid_chars( string $value, string $pattern ): array {
+		// Remove delimiters and optional anchors so we can match a single char.
+		$char_pattern  = trim( $pattern, '/' );
+		$char_pattern  = preg_replace( '/^\^/', '', $char_pattern );
+		$char_pattern  = preg_replace( '/\$$/', '', $char_pattern );
+		$char_pattern  = str_replace( '+', '', $char_pattern );
 		$allowed_regex = '/' . $char_pattern;
 
-		$invalid_chars = array();
-		// Check each character.
-		$chars = preg_split( '//u', $value, -1, PREG_SPLIT_NO_EMPTY );
+		$invalid = array();
+		$chars   = preg_split( '//u', $value, -1, PREG_SPLIT_NO_EMPTY );
 		foreach ( $chars as $char ) {
 			if ( ! preg_match( $allowed_regex, $char ) ) {
-				$invalid_chars[] = $char;
+				$invalid[] = $char;
 			}
 		}
 
-		if ( ! empty( $invalid_chars ) ) {
-			$unique    = array_unique( $invalid_chars );
-			$chars_str = implode( ', ', $unique );
-			return sprintf(
-				/* translators: 1. field name, 2. invalid characters list */
-				_n(
-					'%1$s field contains invalid character: "%2$s". Please remove it to continue.',
-					'%1$s field contains invalid characters: "%2$s". Please remove them to continue.',
-					count( $unique ),
-					'yoco-payment-gateway'
-				),
-				$field,
-				$chars_str
-			);
-
-		}
-
-		return null;
+		return array_values( array_unique( $invalid ) );
 	}
 
 	/**

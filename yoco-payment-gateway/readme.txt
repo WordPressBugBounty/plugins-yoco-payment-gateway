@@ -4,7 +4,7 @@ Tags: woocommerce,payment gateway
 Requires at least: 6.4.0
 Tested up to: 6.9
 Requires PHP: 7.4.0
-Stable tag: 3.9.3
+Stable tag: 3.9.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,9 @@ Set the plugin to Test mode, fetch your Test Keys from the [Yoco Business Porta
 More detailed installation notes can be found in [Yoco Gateway for WooCommerce: User Guide.](https://support.yoco.help/s/article/Yoco-for-WooCommerce) or you can [get in touch with us](https://www.yoco.com/za/contact/).
 
 == Changelog ==
+
+= 3.9.4 =
+* Fix - First and last name validation errors on the block-based checkout now appear inline under each field, and clear correctly when the field is fixed or a different payment method is selected.
 
 = 3.9.3 =
 * Add   - Add structured debug logging for failed checkout requests and filter 'yoco_payment_gateway_debug' for extra debug information.

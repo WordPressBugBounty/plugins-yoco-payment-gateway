@@ -53,6 +53,7 @@ final class BlocksCheckout extends AbstractPaymentMethodType {
 			array(
 				'wc-blocks-registry',
 				'wc-settings',
+				'wp-data',
 				'wp-element',
 				'wp-html-entities',
 				'wp-i18n',

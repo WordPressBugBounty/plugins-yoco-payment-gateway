@@ -5,7 +5,7 @@
  * Description: Take debit and credit card payments on your store.
  * Author: Yoco
  * Author URI: https://www.yoco.com
- * Version: 3.9.3
+ * Version: 3.9.4
  * Requires at least: 6.4.0
  * Tested up to: 6.9
  * WC requires at least: 8.0.0
