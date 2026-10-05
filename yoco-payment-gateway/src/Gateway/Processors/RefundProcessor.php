@@ -38,7 +38,7 @@ class RefundProcessor {
 			$description  = isset( $body['description'] ) ? $body['description'] : '';
 			$full_message = 'Message: ' . $message . ' | Description: ' . $description;
 			if ( isset( $body['description'] ) && 'Payment has already been refunded.' !== $body['description'] ) {
-				return new WP_Error( $code, $description );
+				return self::refund_failed( $order, $amount, new WP_Error( $code, $description ) );
 			}
 
 			if ( ( isset( $body['status'] ) && 'succeeded' === $body['status'] ) || 'Payment has already been refunded.' === $body['description'] ) {
@@ -50,11 +50,34 @@ class RefundProcessor {
 				return true;
 			}
 
-			return new WP_Error( $code, $full_message );
+			return self::refund_failed( $order, $amount, new WP_Error( $code, $full_message ) );
 		} catch ( \Throwable $th ) {
-			yoco( Logger::class )->logError( sprintf( 'Yoco: ERROR: Failed to request for refund: "%s".', $th->getMessage() ) );
-
-			return new WP_Error( $th->getCode(), $th->getMessage() );
+			// WP_Error drops the message when the code is empty, and these exceptions carry code 0.
+			return self::refund_failed( $order, $amount, new WP_Error( 'yoco_refund_failed', $th->getMessage() ) );
 		}
+	}
+
+	/**
+	 * Record a failed refund in the gateway log and the order notes.
+	 *
+	 * @param  WC_Order $order Woo Order.
+	 * @param  float    $amount Amount.
+	 * @param  WP_Error $error Error returned to WooCommerce.
+	 *
+	 * @return WP_Error The same error.
+	 */
+	private static function refund_failed( WC_Order $order, float $amount, WP_Error $error ): WP_Error {
+		yoco( Logger::class )->logError( sprintf( 'Refund of %1$s for order #%2$s failed: %3$s', $amount, $order->get_id(), $error->get_error_message() ) );
+
+		$order->add_order_note(
+			sprintf(
+				// translators: 1: refund amount, 2: error message.
+				__( 'Yoco: Refund of %1$s failed. %2$s', 'yoco-payment-gateway' ),
+				wc_price( $amount, array( 'currency' => $order->get_currency() ) ),
+				$error->get_error_message()
+			)
+		);
+
+		return $error;
 	}
 }

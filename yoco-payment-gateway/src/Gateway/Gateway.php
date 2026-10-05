@@ -4,6 +4,7 @@ namespace Yoco\Gateway;
 
 use Automattic\WooCommerce\StoreApi\Payments\PaymentContext;
 use Exception;
+use WC_Admin_Settings;
 use WC_Order;
 use WC_Payment_Gateway;
 use WP_Error;
@@ -64,6 +65,8 @@ class Gateway extends WC_Payment_Gateway {
 
 		add_action( "woocommerce_update_options_payment_gateways_{$this->id}", array( $this, 'update_admin_options' ) );
 		add_filter( "woocommerce_settings_api_sanitized_fields_{$this->id}", array( $this, 'unset_fields' ) );
+		add_filter( "woocommerce_settings_api_sanitized_fields_{$this->id}", array( $this, 'disable_without_valid_key' ) );
+		add_filter( "woocommerce_gateway_{$this->id}_settings_values", array( $this, 'disable_without_valid_key' ) );
 
 		add_action( 'woocommerce_rest_checkout_process_payment_with_context', array( $this, 'validate_billing_name_chars' ), 5, 1 );
 
@@ -346,9 +349,68 @@ class Gateway extends WC_Payment_Gateway {
 	public function process_admin_options() {
 		parent::process_admin_options();
 
-		$processor = new OptionsProcessor( $this );
+		// Reload, the settings filter may have switched the gateway off.
+		$this->init_settings();
 
-		return $processor->process();
+		return ( new OptionsProcessor( $this ) )->process();
+	}
+
+	/**
+	 * Keep the gateway disabled until the selected mode has a valid secret key.
+	 *
+	 * Runs on every settings write: form, Payments list toggle and REST API.
+	 *
+	 * @param  array $settings Gateway settings about to be stored.
+	 *
+	 * @return array
+	 *
+	 * @since 3.9.5
+	 */
+	public function disable_without_valid_key( $settings ) {
+		if ( ! is_array( $settings ) || ! wc_string_to_bool( $settings['enabled'] ?? 'no' ) ) {
+			return $settings;
+		}
+
+		$mode = (string) ( $settings['mode'] ?? '' );
+		$key  = (string) ( $settings[ $mode . '_secret_key' ] ?? '' );
+
+		if ( Credentials::isValidSecretKey( $mode, $key ) ) {
+			return $settings;
+		}
+
+		$settings['enabled'] = 'no';
+
+		// The REST controller reads the property back for its response.
+		$this->enabled             = 'no';
+		$this->settings['enabled'] = 'no';
+
+		if ( in_array( $mode, Credentials::MODES, true ) ) {
+			yoco( Logger::class )->logError( sprintf( 'Gateway disabled, %s secret key is missing or invalid.', $mode ) );
+			// translators: Gateway mode live|test.
+			$message = sprintf( __( 'Yoco Payments is disabled until a valid %s secret key is saved.', 'yoco-payment-gateway' ), $mode );
+		} else {
+			yoco( Logger::class )->logError( 'Gateway disabled, no mode selected.' );
+			$message = __( 'Yoco Payments is disabled until a mode is selected and a valid secret key is saved.', 'yoco-payment-gateway' );
+		}
+
+		// Shown in place of the "settings have been saved" message.
+		WC_Admin_Settings::add_error( $message );
+
+		return $settings;
+	}
+
+	/**
+	 * While this returns true the Payments list toggle refuses to enable the gateway
+	 * and sends the merchant to the settings page instead.
+	 *
+	 * @return bool
+	 *
+	 * @since 3.9.5
+	 */
+	public function needs_setup() {
+		$mode = $this->get_option( 'mode' );
+
+		return ! Credentials::isValidSecretKey( $mode, (string) $this->get_option( $mode . '_secret_key', '' ) );
 	}
 
 	public function admin_options() {

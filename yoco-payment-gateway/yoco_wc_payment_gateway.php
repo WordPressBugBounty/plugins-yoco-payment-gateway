@@ -5,11 +5,11 @@
  * Description: Take debit and credit card payments on your store.
  * Author: Yoco
  * Author URI: https://www.yoco.com
- * Version: 3.9.4
+ * Version: 3.9.5
  * Requires at least: 6.4.0
- * Tested up to: 6.9
+ * Tested up to: 7.1
  * WC requires at least: 8.0.0
- * WC tested up to: 10.6
+ * WC tested up to: 11.2
  * Requires Plugins: woocommerce
  * Text Domain: yoco-payment-gateway
  * License:           GPLv2 or later
@@ -122,20 +122,15 @@ add_action(
 	'wp_loaded',
 	// Maybe update plugin version option.
 	function () {
+		// Record the version only once WooCommerce has loaded.
 		if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
 			return;
 		}
 
 		$version_option_key = 'yoco_wc_payment_gateway_version';
-		$installed_version  = get_option( $version_option_key );
 
-		if ( YOCO_PLUGIN_VERSION === $installed_version ) {
+		if ( YOCO_PLUGIN_VERSION === get_option( $version_option_key ) ) {
 			return;
-		}
-
-		if ( version_compare( $installed_version, '3.0.0', '<' ) ) {
-			$gateway = yoco( \Yoco\Gateway\Provider::class )->getGateway();
-			$gateway->update_admin_options();
 		}
 
 		update_option( $version_option_key, YOCO_PLUGIN_VERSION );

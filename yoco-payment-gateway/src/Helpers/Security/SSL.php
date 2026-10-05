@@ -9,16 +9,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SSL {
 
 	public function isSecure(): bool {
-		// cloudflare
+		// cloudflare, WordPress slashes $_SERVER so unslash before decoding.
 		if ( ! empty( $_SERVER['HTTP_CF_VISITOR'] ) ) {
-			$cfo = json_decode( $_SERVER['HTTP_CF_VISITOR'] );
-			if ( isset( $cfo->scheme ) && 'https' === $cfo->scheme ) {
+			$visitor = json_decode( sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_VISITOR'] ) ) );
+			if ( isset( $visitor->scheme ) && 'https' === $visitor->scheme ) {
 				return true;
 			}
 		}
 
 		// other proxy
-		if ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+		if ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ) ) ) {
 			return true;
 		}
 

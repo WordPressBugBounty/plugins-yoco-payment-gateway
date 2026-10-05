@@ -20,8 +20,10 @@ class Settings {
 
 	public function fields( array $fields ): array {
 
-		$isDisabled = ! yoco( Setup::class )->deactivateOnIncompatibileEnv();
-		$custom     = array(
+		// Readonly rather than disabled so a save while locked still submits the texts.
+		$locked_attributes = yoco( Setup::class )->deactivateOnIncompatibileEnv() ? array() : array( 'readonly' => 'readonly' );
+
+		$custom = array(
 			'enabled'         => array(
 				'title'       => __( 'Enable/Disable', 'yoco-payment-gateway' ),
 				'label'       => __( 'Enable Yoco Payments', 'yoco-payment-gateway' ),
@@ -30,26 +32,26 @@ class Settings {
 				'default'     => 'no',
 			),
 			'title'           => array(
-				'title'       => __( 'Title', 'yoco-payment-gateway' ),
-				'type'        => 'text',
-				'disabled'    => $isDisabled,
-				'description' => __( 'Gateway title visible on checkout.', 'yoco-payment-gateway' ),
-				'default'     => __( 'Yoco', 'yoco-payment-gateway' ),
+				'title'             => __( 'Title', 'yoco-payment-gateway' ),
+				'type'              => 'text',
+				'custom_attributes' => $locked_attributes,
+				'description'       => __( 'Gateway title visible on checkout.', 'yoco-payment-gateway' ),
+				'default'           => __( 'Yoco', 'yoco-payment-gateway' ),
 			),
 			'description'           => array(
-				'title'       => __( 'Description', 'yoco-payment-gateway' ),
-				'type'        => 'textarea',
-				'disabled'    => $isDisabled,
-				'description' => __( 'Gateway description visible on checkout.', 'yoco-payment-gateway' ),
-				'default'     => __( 'Pay securely using a credit/debit card or other payment methods via Yoco.', 'yoco-payment-gateway' ),
-				'css'         => 'max-width:400px;',
+				'title'             => __( 'Description', 'yoco-payment-gateway' ),
+				'type'              => 'textarea',
+				'custom_attributes' => $locked_attributes,
+				'description'       => __( 'Gateway description visible on checkout.', 'yoco-payment-gateway' ),
+				'default'           => __( 'Pay securely using a credit/debit card or other payment methods via Yoco.', 'yoco-payment-gateway' ),
+				'css'               => 'max-width:400px;',
 			),
 			'mode'            => array(
 				'title'       => __( 'Mode', 'yoco-payment-gateway' ),
 				'label'       => __( 'Mode', 'yoco-payment-gateway' ),
 				'type'        => 'select',
 				'description' => __( 'Test mode allow you to test the plugin without processing money.<br>Set the plugin to Live mode and click on "Save changes" for real customers to use it.', 'yoco-payment-gateway' ),
-				'default'     => 'Test',
+				'default'     => 'test',
 				'options'     => array(
 					'live' => 'Live',
 					'test' => 'Test',

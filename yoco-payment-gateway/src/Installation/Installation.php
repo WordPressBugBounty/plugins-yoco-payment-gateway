@@ -5,6 +5,7 @@ namespace Yoco\Installation;
 use Exception;
 use Yoco\Helpers\Logger;
 use Yoco\Core\Constants;
+use Yoco\Gateway\Credentials;
 
 use function Yoco\yoco;
 
@@ -16,16 +17,38 @@ class Installation {
 
 	private ?array $settings = null;
 
+	public function __construct() {
+		// The settings are read early in every request, so a save would leave the install request with the old values.
+		add_action( 'add_option_woocommerce_class_yoco_wc_payment_gateway_settings', array( $this, 'resetSettings' ) );
+		add_action( 'update_option_woocommerce_class_yoco_wc_payment_gateway_settings', array( $this, 'resetSettings' ) );
+	}
+
+	/**
+	 * Drop the cached settings so the next read gets the stored values.
+	 *
+	 * Hooked to `add_option_` and `update_option_woocommerce_class_yoco_wc_payment_gateway_settings`.
+	 *
+	 * @return void
+	 *
+	 * @since 3.9.5
+	 */
+	public function resetSettings(): void {
+		$this->settings = null;
+	}
+
 	public function getSettings(): array {
 		if ( null === $this->settings ) {
-			$settings       = wp_parse_args(
+			// Defaults mirror the form fields in Gateway\Settings.
+			$this->settings = wp_parse_args(
 				get_option( 'woocommerce_class_yoco_wc_payment_gateway_settings' ),
 				array(
+					'enabled'         => 'no',
+					'mode'            => 'test',
 					'live_secret_key' => '',
 					'test_secret_key' => '',
+					'debug'           => 'yes',
 				)
 			);
-			$this->settings = wp_parse_args( $this->getPostedData(), $settings );
 		}
 
 		return $this->settings;
@@ -44,9 +67,21 @@ class Installation {
 	}
 
 	public function getSecretKey( string $mode = '' ) {
-		$mode = ( 'live' === $mode || 'test' === $mode ) ? $mode : $this->getMode();
+		$mode     = $this->resolveMode( $mode );
+		$settings = $this->getSettings();
 
-		return isset( $this->getSettings()[ $mode . '_secret_key' ] ) ? $this->getSettings()[ $mode . '_secret_key' ] : '';
+		return isset( $settings[ $mode . '_secret_key' ] ) && is_string( $settings[ $mode . '_secret_key' ] ) ? $settings[ $mode . '_secret_key' ] : '';
+	}
+
+	/**
+	 * Resolve the gateway mode to use for a request.
+	 *
+	 * @param  string $mode Gateway mode live|test, anything else falls back to the stored mode.
+	 *
+	 * @return string The mode, empty when no mode is stored.
+	 */
+	private function resolveMode( string $mode ): string {
+		return in_array( $mode, Credentials::MODES, true ) ? $mode : $this->getMode();
 	}
 
 	public function getApiUrl(): string {
@@ -88,8 +123,31 @@ class Installation {
 		return '';
 	}
 
+	/**
+	 * Build the Authorization header value for the resolved mode.
+	 *
+	 * @param  string $mode Gateway mode live|test, empty resolves to the stored mode.
+	 *
+	 * @return string
+	 *
+	 * @throws MissingSecretKeyException When no secret key is stored for the mode.
+	 */
 	public function getApiBearer( string $mode = '' ): string {
-		return 'Bearer ' . $this->getSecretKey( $mode );
+		$mode   = $this->resolveMode( $mode );
+		$secret = $this->getSecretKey( $mode );
+
+		if ( '' === $secret ) {
+			yoco( Logger::class )->logError( '' !== $mode ? sprintf( 'Missing %s secret key.', $mode ) : 'Missing secret key, no mode selected.' );
+
+			$message = '' !== $mode
+				// translators: Gateway mode live|test.
+				? sprintf( __( 'Missing %s secret key. Please check the Yoco Payments settings.', 'yoco-payment-gateway' ), $mode )
+				: __( 'Missing secret key. Please select a mode and check the Yoco Payments settings.', 'yoco-payment-gateway' );
+
+			throw new MissingSecretKeyException( esc_html( $message ) );
+		}
+
+		return 'Bearer ' . $secret;
 	}
 
 	public function getIdMetaKey(): string {
@@ -141,23 +199,5 @@ class Installation {
 
 	public function getWebhookSecret() {
 		return get_option( $this->getWebhookSecretMetaKey() );
-	}
-
-	private function getPostedData() {
-		if ( ! is_array( $_POST ) ) {
-			return array();
-		}
-
-		$data = array();
-
-		foreach ( $_POST as $key => $value ) {
-			if ( false === strpos( $key, 'woocommerce_class_yoco_wc_payment_gateway' ) ) {
-				continue;
-			}
-
-			$data[ str_replace( 'woocommerce_class_yoco_wc_payment_gateway_', '', $key ) ] = sanitize_text_field( wp_unslash( $value ) );
-		}
-
-		return $data;
 	}
 }

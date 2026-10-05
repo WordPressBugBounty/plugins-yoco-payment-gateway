@@ -12,6 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Client {
 
+	// Worth one retry.
+	public const TRANSIENT_STATUS_CODES = array( 408, 409, 425, 429, 502, 503, 504 );
+
+	// Recover once the merchant fixes the secret key.
+	public const UNAUTHORIZED_STATUS_CODES = array( 401, 403 );
+
 	public function post( string $url, array $args ) {
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			yoco( Logger::class )->logError( 'Invalid URL for POST request.' );

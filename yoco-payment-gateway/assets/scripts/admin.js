@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (testKeyField) {
     wrap( testKeyField, testKeyFieldWrap);
-    testKeyField.addEventListener('keyup', event => validateKeyField(event, 'test'));
+    testKeyField.addEventListener('input', event => validateKeyField(event, 'test'));
     testKeyFieldWrap.insertAdjacentHTML('beforeend', passButtonHTML);
     testKeyFieldWrap.classList.add('yoco-api-key');
     testKeyFieldWrap.addEventListener('click', event => toggleAPIkey(event));
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (liveKeyField) {
     wrap( liveKeyField, liveKeyFieldWrap);
-    liveKeyField.addEventListener('keyup', event => validateKeyField(event, 'live'));
+    liveKeyField.addEventListener('input', event => validateKeyField(event, 'live'));
     liveKeyFieldWrap.insertAdjacentHTML('beforeend', passButtonHTML);
     liveKeyFieldWrap.classList.add('yoco-api-key');
     liveKeyFieldWrap.addEventListener('click', event => toggleAPIkey(event));
@@ -49,15 +49,26 @@ function wrap(elToWrap, wrapper) {
 }
 
 function validateKeyField(event, type) {
-  removeError(event.target);
+  const field = event.target;
+  const key   = field.value;
 
-  if (! isKeyPrefixValid(event.target.value, type) || ! isKeyLengthValid(event.target.value)) {
-    disableSaveButton();
-    displayError(event.target, `Please check the formatting of the ${type} secret key.`);
-    return;
+  removeError(field);
+
+  if ('' !== key && ! isKeyPrefixValid(key, type)) {
+    displayError(field, `Please check the formatting of the ${type} secret key.`, true);
+  } else if ('' !== key && ! isKeyLengthValid(key)) {
+    displayError(field, `The ${type} secret key is usually 36 characters long, please double check it.`, false);
   }
 
-  enableSaveButton();
+  syncSaveButton();
+}
+
+function syncSaveButton() {
+  if (document.querySelector('.yoco-woocommerce-settings-error.yoco-blocking')) {
+    disableSaveButton();
+  } else {
+    enableSaveButton();
+  }
 }
 
 function isKeyLengthValid(key) {
@@ -85,10 +96,15 @@ function enableSaveButton() {
   document.querySelector('.woocommerce-save-button').removeAttribute('disabled');
 }
 
-function displayError(field, message) {
+function displayError(field, message, blocking) {
   const span = document.createElement('span');
 
   span.classList.add('yoco-woocommerce-settings-error');
+
+  if (blocking) {
+    span.classList.add('yoco-blocking');
+  }
+
   span.textContent = message;
 
   field.parentNode.append(span);

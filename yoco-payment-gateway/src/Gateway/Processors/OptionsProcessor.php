@@ -5,6 +5,7 @@ namespace Yoco\Gateway\Processors;
 use Exception;
 use Yoco\Gateway\Gateway;
 use Yoco\Helpers\Admin\Notices;
+use Yoco\Helpers\Http\Client;
 use Yoco\Helpers\Logger;
 use Yoco\Installation\Installation;
 use Yoco\Installation\Request;
@@ -16,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class OptionsProcessor {
+
+	// Sent by the installation API when Yoco refuses to register the webhook for this site.
+	private const WEBHOOK_REGISTRATION_ERROR = 'Unable to create subscription';
 
 	private ?Gateway $gateway = null;
 
@@ -33,24 +37,23 @@ class OptionsProcessor {
 				return;
 			}
 
-			$this->validateKeys();
 			$installationRequest = new Request();
 
 			$response = $installationRequest->send();
 
-			// Retry the request for 408, 409, 425, 429, 502, 503, 504 response codes.
-			if ( in_array( $response['code'], array( 408, 409, 425, 429, 502, 503, 504 ) ) ) {
+			// Retry the request once for transient response codes.
+			if ( in_array( (int) $response['code'], Client::TRANSIENT_STATUS_CODES, true ) ) {
 				$response = $installationRequest->send();
 			}
 
 			// If we get 500 response code, reset Idempotence Key and retry the request.
-			if ( in_array( $response['code'], array( 500 ) ) ) {
+			if ( 500 === (int) $response['code'] ) {
 				add_filter( 'yoco_payment_gateway/installation/request/headers', array( $this, 'resetIdempotenceKey' ) );
 
 				$response = $installationRequest->send();
 			}
 
-			if ( ! in_array( $response['code'], array( 200, 201, 202 ) ) ) {
+			if ( ! in_array( (int) $response['code'], array( 200, 201, 202 ), true ) ) {
 				$error_message = isset( $response['body']['errorMessage'] ) ? $response['body']['errorMessage'] : '';
 				$error_code    = isset( $response['body']['errorCode'] ) ? $response['body']['errorCode'] : '';
 				$error_string  = "\n" . $response['code'] . ': ' . $response['message'] . ( $error_message ? "\n" . $error_message : '' ) . ( $error_code ? "\n" . $error_code : '' );
@@ -61,6 +64,12 @@ class OptionsProcessor {
 						$error_string
 					)
 				);
+
+				if ( is_string( $error_message ) && false !== stripos( $error_message, self::WEBHOOK_REGISTRATION_ERROR ) ) {
+					// The API does not say why, in practice the account has reached its webhook limit.
+					// translators: Error message.
+					throw new Exception( sprintf( __( 'Yoco could not register a webhook for this site, so the site will not be notified about payments and refunds. This usually happens when your Yoco account has reached its maximum number of webhooks. %s', 'yoco-payment-gateway' ), $error_string ) );
+				}
 
 				// translators: Error message.
 				throw new Exception( sprintf( __( 'Failed to request installation. %s', 'yoco-payment-gateway' ), $error_string ) );
@@ -103,20 +112,6 @@ class OptionsProcessor {
 	private function displayFailureNotice( \Throwable $th ): void {
 		// translators: Error message.
 		yoco( Notices::class )->renderNotice( 'warning', sprintf( __( 'Failed to install plugin. %s', 'yoco-payment-gateway' ), $th->getMessage() ) );
-	}
-
-	private function validateKeys(): void {
-		if ( 'test' === $this->gateway->mode->getMode() && empty( preg_match( '/^sk_test/', $this->gateway->credentials->getTestSecretKey() ) ) ) {
-			yoco( Notices::class )->renderNotice( 'warning', esc_html__( 'Please check the formatting of the secret key.', 'yoco-payment-gateway' ) );
-			yoco( Logger::class )->logError( 'Test secret key seem to be invalid.' );
-			throw new Exception( esc_html__( 'Test secret key seem to be invalid.', 'yoco-payment-gateway' ) );
-		}
-
-		if ( 'live' === $this->gateway->mode->getMode() && empty( preg_match( '/^sk_live/', $this->gateway->credentials->getLiveSecretKey() ) ) ) {
-			yoco( Notices::class )->renderNotice( 'warning', esc_html__( 'Please check the formatting of the secret key.', 'yoco-payment-gateway' ) );
-			yoco( Logger::class )->logError( 'Live secret key seem to be invalid.' );
-			throw new Exception( esc_html__( 'Live secret key seem to be invalid.', 'yoco-payment-gateway' ) );
-		}
 	}
 
 	public function resetIdempotenceKey( $headers ) {

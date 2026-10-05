@@ -23,6 +23,10 @@ class Metadata {
 
 	public const REFUND_ID_ORDER_META_KEY = 'yoco_order_refund_id';
 
+	public const UNAUTHORIZED_NOTE_ORDER_META_KEY = 'yoco_order_unauthorized_note';
+
+	public const MISSING_KEY_NOTE_ORDER_META_KEY = 'yoco_order_missing_key_note';
+
 	public function __construct() {
 		add_action( 'yoco_payment_gateway/checkout/created', array( $this, 'updateOrderCheckoutMeta' ), 10, 2 );
 		add_action( 'yoco_payment_gateway/payment/completed', array( $this, 'updateOrderPaymentId' ), 10, 2 );
@@ -87,6 +91,58 @@ class Metadata {
 
 	public function getOrderRefundId( WC_Abstract_Order $order ): string {
 		return $this->getOrderMeta( $order, self::REFUND_ID_ORDER_META_KEY );
+	}
+
+	/**
+	 * Tell whether the order already has the unauthorized status check note.
+	 *
+	 * @param  WC_Order $order WC Order.
+	 *
+	 * @return bool
+	 *
+	 * @since 3.9.5
+	 */
+	public function hasOrderUnauthorizedNote( WC_Order $order ): bool {
+		return 'yes' === $this->getOrderMeta( $order, self::UNAUTHORIZED_NOTE_ORDER_META_KEY );
+	}
+
+	/**
+	 * Record that the order has the unauthorized status check note.
+	 *
+	 * @param  WC_Order $order WC Order.
+	 *
+	 * @return void
+	 *
+	 * @since 3.9.5
+	 */
+	public function markOrderUnauthorizedNote( WC_Order $order ): void {
+		$this->updateOrderMeta( $order, self::UNAUTHORIZED_NOTE_ORDER_META_KEY, 'yes' );
+	}
+
+	/**
+	 * Tell whether the order already has the missing secret key note.
+	 *
+	 * @param  WC_Order $order WC Order.
+	 *
+	 * @return bool
+	 *
+	 * @since 3.9.5
+	 */
+	public function hasOrderMissingKeyNote( WC_Order $order ): bool {
+		return 'yes' === $this->getOrderMeta( $order, self::MISSING_KEY_NOTE_ORDER_META_KEY );
+	}
+
+	/**
+	 * Record that the order has the missing secret key note.
+	 *
+	 * @param  WC_Order $order WC Order.
+	 *
+	 * @return void
+	 *
+	 * @since 3.9.5
+	 */
+	public function markOrderMissingKeyNote( WC_Order $order ): void {
+		$this->updateOrderMeta( $order, self::MISSING_KEY_NOTE_ORDER_META_KEY, 'yes' );
 	}
 
 	public function updateOrderMeta( WC_Abstract_Order $order, string $key, string $value ): void {

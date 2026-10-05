@@ -2,9 +2,9 @@
 Contributors: Yoco
 Tags: woocommerce,payment gateway
 Requires at least: 6.4.0
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 7.4.0
-Stable tag: 3.9.4
+Stable tag: 3.9.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,18 @@ Set the plugin to Test mode, fetch your Test Keys from the [Yoco Business Porta
 More detailed installation notes can be found in [Yoco Gateway for WooCommerce: User Guide.](https://support.yoco.help/s/article/Yoco-for-WooCommerce) or you can [get in touch with us](https://www.yoco.com/za/contact/).
 
 == Changelog ==
+
+= 3.9.5 =
+* Fix   - Payment status checks are no longer sent to Yoco without a secret key. A failed check now waits longer before each retry and stops after 30 attempts, instead of repeating every minute.
+* Fix   - The secret keys and other gateway settings are no longer cleared by the plugin's version check. If your secret key was cleared, enter it again under WooCommerce > Settings > Payments > Yoco.
+* Fix   - The gateway can only be enabled when the selected mode has a valid secret key.
+* Fix   - A payment made after WooCommerce cancelled the order is still recorded: cancelled orders are checked for another 24 hours.
+* Fix   - The gateway Title and Description are kept when the settings are saved while those fields are locked.
+* Fix   - A secure connection is detected correctly behind Cloudflare and other proxies.
+* Fix   - A failed refund now shows the reason in the admin and adds an order note, instead of an empty error message.
+* Fix   - The installation request to Yoco uses only the saved gateway settings.
+* Tweak - Saving the settings explains when Yoco cannot register a webhook because the account has reached its webhook limit, instead of showing a generic error.
+* Tweak - WordPress 7.1 and WooCommerce 11.2 Compatibility.
 
 = 3.9.4 =
 * Fix - First and last name validation errors on the block-based checkout now appear inline under each field, and clear correctly when the field is fixed or a different payment method is selected.

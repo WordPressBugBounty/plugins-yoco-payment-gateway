@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Credentials {
 
+	public const MODES = array( 'live', 'test' );
+
 	private ?Gateway $gateway = null;
 
 	private ?string $livePublic = null;
@@ -24,6 +26,25 @@ class Credentials {
 
 	public function __construct( Gateway $gateway ) {
 		$this->gateway = $gateway;
+	}
+
+	/**
+	 * Tell whether a secret key has the valid format for the given mode.
+	 *
+	 * @param  string $mode Gateway mode live|test.
+	 * @param  string $key Secret key.
+	 *
+	 * @return bool
+	 *
+	 * @since 3.9.5
+	 */
+	public static function isValidSecretKey( string $mode, string $key ): bool {
+		if ( ! in_array( $mode, self::MODES, true ) ) {
+			return false;
+		}
+
+		// Same prefix rule as admin.js, plus a non-empty secret.
+		return 1 === preg_match( '/^sk_' . $mode . '_\S+$/', $key );
 	}
 
 	public function getLivePublicKey(): string {
